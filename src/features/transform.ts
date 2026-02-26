@@ -231,7 +231,10 @@ export function flattenDatasetResults(rawData: unknown): CategoryResult[] {
   }
 
   for (const [datasetKey, datasetValue] of Object.entries(datasetResults)) {
-    const normalizedDataset = normalizeDatasetKey(datasetKey);
+    let normalizedDataset = normalizeDatasetKey(datasetKey);
+    if (normalizedDataset === 'tmmluplus_test') {
+      normalizedDataset = 'tmmluplus';
+    }
 
     if (typeof datasetValue !== 'object' || datasetValue === null) {
       continue;
@@ -253,6 +256,11 @@ export function flattenDatasetResults(rawData: unknown): CategoryResult[] {
 
       if (typeof file === 'string' && typeof accuracy_mean === 'number') {
         let category = extractCategory(file);
+
+        // Normalize tmmluplus_test
+        if (category === 'tmmluplus_test') {
+          category = 'tmmluplus';
+        }
 
         // Normalize tw-legal-benchmark-v1 default test naming
         if (
