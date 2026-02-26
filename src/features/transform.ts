@@ -15,10 +15,16 @@ export function getSourceIdentifier(source: DataSource): string {
 }
 
 /**
- * Normalize dataset key by stripping leading "datasets/"
+ * Normalize dataset key by extracting the dataset name and removing prefixes
  */
 function normalizeDatasetKey(key: string): string {
-  return key.replace(/^datasets\//, '');
+  // Remove trailing slashes
+  let name = key.replace(/\/+$/, '');
+  // Get the last path segment
+  name = name.split('/').pop() || name;
+  // Remove author prefixes like 'cais__' or 'ikala__'
+  name = name.split('__').pop() || name;
+  return name;
 }
 
 /**
@@ -29,8 +35,8 @@ function extractCategory(filename: string): string {
   const name = filename.split('/').pop() || filename;
   // Remove test suffix and extension
   return name
-    .replace(/_test\.(jsonl?|csv)$/, '')
-    .replace(/\.(jsonl?|csv)$/, '');
+    .replace(/_test\.(jsonl?|csv|parquet)$/, '')
+    .replace(/\.(jsonl?|csv|parquet)$/, '');
 }
 
 /**
