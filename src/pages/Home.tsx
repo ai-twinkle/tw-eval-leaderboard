@@ -130,7 +130,9 @@ export const Home: React.FC = () => {
             config?: { model?: { name?: string } };
             timestamp?: string;
           };
-          const modelName = dataObj.config?.model?.name || benchmark.modelName;
+          const rawModelName =
+            dataObj.config?.model?.name || benchmark.modelName;
+          const modelName = rawModelName.split('/').pop() || rawModelName;
           const timestamp = latestRun.displayTimestamp;
 
           // Create new source
@@ -220,9 +222,10 @@ export const Home: React.FC = () => {
           config?: { model?: { name?: string } };
           timestamp?: string;
         };
-        const modelName =
+        const rawModelName =
           dataObj.config?.model?.name ||
           file.name.replace(/\.(json|jsonl)$/, '');
+        const modelName = rawModelName.split('/').pop() || rawModelName;
         const timestamp = dataObj.timestamp || new Date().toISOString();
 
         const newSource: DataSource = {
