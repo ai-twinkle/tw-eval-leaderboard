@@ -405,7 +405,7 @@ export const CategoryDashboard: React.FC<CategoryDashboardProps> = ({
         // Rank badge
         g.append('text')
           .attr('x', -margin.left + 10)
-          .attr('y', badgeY)
+          .attr('y', badgeY - 6)
           .attr('text-anchor', 'start')
           .attr('dominant-baseline', 'middle')
           .style('font-size', '10px')
@@ -423,8 +423,8 @@ export const CategoryDashboard: React.FC<CategoryDashboardProps> = ({
             : test.dataset;
 
         g.append('rect')
-          .attr('x', -margin.left + 40)
-          .attr('y', badgeY - 8)
+          .attr('x', -margin.left + 36)
+          .attr('y', badgeY - 14)
           .attr('width', datasetText.length * 6.5 + 8)
           .attr('height', 16)
           .attr('fill', datasetColor)
@@ -436,8 +436,8 @@ export const CategoryDashboard: React.FC<CategoryDashboardProps> = ({
 
         // Dataset badge text
         g.append('text')
-          .attr('x', -margin.left + 44)
-          .attr('y', badgeY)
+          .attr('x', -margin.left + 40)
+          .attr('y', badgeY - 6)
           .attr('text-anchor', 'start')
           .attr('dominant-baseline', 'middle')
           .style('font-size', '9px')
@@ -450,9 +450,9 @@ export const CategoryDashboard: React.FC<CategoryDashboardProps> = ({
 
         // Test name
         g.append('text')
-          .attr('x', -15)
-          .attr('y', badgeY)
-          .attr('text-anchor', 'end')
+          .attr('x', -margin.left + 36)
+          .attr('y', badgeY + 10)
+          .attr('text-anchor', 'start')
           .attr('dominant-baseline', 'middle')
           .style('font-size', '11px')
           .style('fill', getCssVar('--chart-text-primary'))
