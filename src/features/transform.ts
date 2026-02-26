@@ -252,7 +252,16 @@ export function flattenDatasetResults(rawData: unknown): CategoryResult[] {
       const accuracy_std = result.accuracy_std as number | undefined;
 
       if (typeof file === 'string' && typeof accuracy_mean === 'number') {
-        const category = extractCategory(file);
+        let category = extractCategory(file);
+
+        // Normalize tw-legal-benchmark-v1 default test naming
+        if (
+          normalizedDataset === 'tw-legal-benchmark-v1' &&
+          category === 'default'
+        ) {
+          category = 'benchmark';
+        }
+
         results.push({
           category: `${normalizedDataset}/${category}`,
           file,
