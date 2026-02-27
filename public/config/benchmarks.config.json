@@ -80,6 +80,15 @@
       "variance": "default",
       "openSource": true,
       "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/devstral-eval-logs-and-scores/tree/main/results/mistralai__Devstral-2-123B-Instruct-2512/default"
+    },
+    {
+      "id": "Nemotron-3-Nano-30B-A3B-BF16-twinkle-eval-v1",
+      "label": "Nemotron 3 Nano 30B A3B BF16 — Twinkle Eval V1",
+      "provider": "NVIDIA",
+      "modelName": "Nemotron-3-Nano-30B-A3B-BF16",
+      "variance": "default",
+      "openSource": true,
+      "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/nemotron-nano-eval-logs-and-scores/tree/main/results/nvidia__NVIDIA-Nemotron-3-Nano-30B-A3B-BF16/default"
     }
   ],
   "ui": {
