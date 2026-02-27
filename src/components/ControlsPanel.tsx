@@ -209,7 +209,18 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
                             onClick={(e) => e.stopPropagation()}
                           >
                             <span className='text-sm font-medium text-gray-700'>
-                              {source.modelName}
+                              {source.modelId ? (
+                                <a
+                                  href={`https://huggingface.co/${source.modelId}`}
+                                  target='_blank'
+                                  rel='noopener noreferrer'
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  {source.modelName}
+                                </a>
+                              ) : (
+                                source.modelName
+                              )}
                             </span>
                           </Checkbox>
                           <div className='flex items-center gap-1.5 mt-1 ml-6'>

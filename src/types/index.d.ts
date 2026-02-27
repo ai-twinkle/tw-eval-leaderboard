@@ -47,6 +47,7 @@ export interface DataSource {
   label: string;
   provider: string;
   modelName: string;
+  modelId: string;
   variance: string;
   openSource: boolean;
   timestamp: string;

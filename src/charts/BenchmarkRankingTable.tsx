@@ -49,12 +49,13 @@ interface ModelRankingRow {
   key: string;
   provider: string;
   modelName: string;
+  modelId?: string;
   displayName: string;
   openSource: boolean;
   isOfficial: boolean;
   timestamp: string;
   average: number;
-  [testName: string]: string | number | boolean;
+  [testName: string]: string | number | boolean | undefined;
 }
 
 function extractBenchmarkName(category: string): string {
@@ -411,6 +412,7 @@ export const BenchmarkRankingTable: React.FC<RankingTableProps> = ({
           key: `${benchmarkName}-${source.id}`,
           provider: source.provider,
           modelName: source.modelName,
+          modelId: source.modelId,
           displayName,
           openSource: source.openSource,
           isOfficial: source.isOfficial,
@@ -520,7 +522,18 @@ export const BenchmarkRankingTable: React.FC<RankingTableProps> = ({
         render: (text: string, record: ModelRankingRow) => (
           <div>
             <Text strong style={{ fontSize: '13px' }}>
-              {text}
+              {record.modelId ? (
+                <a
+                  href={`https://huggingface.co/${record.modelId}`}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {text}
+                </a>
+              ) : (
+                text
+              )}
             </Text>
             <div>
               {record.openSource && (

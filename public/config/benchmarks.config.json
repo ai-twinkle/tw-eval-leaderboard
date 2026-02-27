@@ -4,6 +4,7 @@
       "id": "llama-4-maverick-twinkle-eval-v1",
       "label": "Llama 4 Maverick — Twinkle Eval V1",
       "provider": "Meta",
+      "modelId": "meta-llama/Llama-4-Maverick-17B-128E-Instruct",
       "modelName": "llama-4-maverick",
       "variance": "default",
       "openSource": true,
@@ -13,6 +14,7 @@
       "id": "llama-4-scout-twinkle-eval-v1",
       "label": "Llama 4 Scout — Twinkle Eval V1",
       "provider": "Meta",
+      "modelId": "meta-llama/Llama-4-Scout-17B-16E-Instruct",
       "modelName": "llama-4-scout",
       "variance": "default",
       "openSource": true,
@@ -23,6 +25,7 @@
       "label": "GPT-OSS 120B — Twinkle Eval V1",
       "provider": "OpenAI",
       "modelName": "gpt-oss-120b",
+      "modelId": "openai/gpt-oss-120b",
       "variance": "low",
       "openSource": true,
       "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/gpt-oss-eval-logs-and-scores/tree/main/results/gpt-oss-120b/low"
@@ -32,6 +35,7 @@
       "label": "GPT-OSS 120B Medium — Twinkle Eval V1",
       "provider": "OpenAI",
       "modelName": "gpt-oss-120b",
+      "modelId": "openai/gpt-oss-120b",
       "variance": "medium",
       "openSource": true,
       "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/gpt-oss-eval-logs-and-scores/tree/main/results/gpt-oss-120b/medium"
@@ -41,6 +45,7 @@
       "label": "GPT-OSS 120B High — Twinkle Eval V1",
       "provider": "OpenAI",
       "modelName": "gpt-oss-120b",
+      "modelId": "openai/gpt-oss-120b",
       "variance": "high",
       "openSource": true,
       "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/gpt-oss-eval-logs-and-scores/tree/main/results/gpt-oss-120b/high"
@@ -50,6 +55,7 @@
       "label": "GPT-OSS 20B — Twinkle Eval V1",
       "provider": "OpenAI",
       "modelName": "gpt-oss-20b",
+      "modelId": "openai/gpt-oss-20b",
       "variance": "low",
       "openSource": true,
       "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/gpt-oss-eval-logs-and-scores/tree/main/results/gpt-oss-20b/low"
@@ -59,6 +65,7 @@
       "label": "GPT-OSS 20B Medium — Twinkle Eval V1",
       "provider": "OpenAI",
       "modelName": "gpt-oss-20b",
+      "modelId": "openai/gpt-oss-20b",
       "variance": "medium",
       "openSource": true,
       "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/gpt-oss-eval-logs-and-scores/tree/main/results/gpt-oss-20b/medium"
@@ -68,6 +75,7 @@
       "label": "GPT-OSS 20B High — Twinkle Eval V1",
       "provider": "OpenAI",
       "modelName": "gpt-oss-20b",
+      "modelId": "openai/gpt-oss-20b",
       "variance": "high",
       "openSource": true,
       "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/gpt-oss-eval-logs-and-scores/tree/main/results/gpt-oss-20b/high"
@@ -77,6 +85,7 @@
       "label": "Devstral 2 123B Instruct 2512 — Twinkle Eval V1",
       "provider": "Mistral AI",
       "modelName": "Devstral-2-123B",
+      "modelId": "mistralai/Devstral-2-123B-Instruct-2512",
       "variance": "default",
       "openSource": true,
       "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/devstral-eval-logs-and-scores/tree/main/results/mistralai__Devstral-2-123B-Instruct-2512/default"
@@ -86,6 +95,7 @@
       "label": "Nemotron 3 Nano 30B A3B BF16 — Twinkle Eval V1",
       "provider": "NVIDIA",
       "modelName": "Nemotron-3-Nano-30B-A3B-BF16",
+      "modelId": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
       "variance": "default",
       "openSource": true,
       "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/nemotron-nano-eval-logs-and-scores/tree/main/results/nvidia__NVIDIA-Nemotron-3-Nano-30B-A3B-BF16/default"
