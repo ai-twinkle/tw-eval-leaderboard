@@ -883,6 +883,7 @@ export const CompactDashboard: React.FC<CompactDashboardProps> = ({
       category: string;
       accuracy: number;
       source: string;
+      testId: string;
     }> = [];
 
     const activeBenchmarksSet = new Set(activeBenchmarks);
@@ -899,6 +900,7 @@ export const CompactDashboard: React.FC<CompactDashboardProps> = ({
             category,
             accuracy: result.accuracy_mean,
             source: source.modelName,
+            testId: result.category,
           });
         }
       }
@@ -912,10 +914,11 @@ export const CompactDashboard: React.FC<CompactDashboardProps> = ({
       .map((cat) => {
         const tests = categoryStats.get(cat) || [];
         const accuracies = tests.map((t) => t.accuracy);
+        const uniqueTests = new Set(tests.map((t) => t.testId));
         return {
           category: cat as CategoryKey,
           mean: d3.mean(accuracies) || 0,
-          count: tests.length,
+          count: uniqueTests.size,
         };
       })
       .sort((a, b) => b.mean - a.mean);
