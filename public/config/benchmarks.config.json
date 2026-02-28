@@ -99,6 +99,16 @@
       "variance": "default",
       "openSource": true,
       "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/nemotron-nano-eval-logs-and-scores/tree/main/results/nvidia__NVIDIA-Nemotron-3-Nano-30B-A3B-BF16/default"
+    },
+    {
+      "id": "Mistral-Large-3-675B-Instruct-2512-twinkle-eval-v1",
+      "label": "Mistral Large 3 675B Instruct 2512 — Twinkle Eval V1",
+      "provider": "Mistral AI",
+      "modelName": "Mistral-Large-3-675B",
+      "modelId": "mistralai/Mistral-Large-3-675B-Instruct-2512",
+      "variance": "default",
+      "openSource": true,
+      "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/mistral-675b-eval-logs-and-scores/tree/main/results/mistralai__Mistral-Large-3-675B-Instruct-2512/default"
     }
   ],
   "ui": {
