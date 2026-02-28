@@ -588,7 +588,7 @@ function drawRadarChart(
       // Checkbox square
       bmItem
         .append('rect')
-        .attr('x', 0)
+        .attr('x', 6.5)
         .attr('y', -6)
         .attr('width', 12)
         .attr('height', 12)
@@ -601,10 +601,10 @@ function drawRadarChart(
         .attr('stroke-width', 1.5);
 
       if (isActive) {
-        // Checkmark perfectly centered in the 12x12 rect (center 6,0)
+        // Checkmark perfectly centered in the 12x12 rect (center 12.5,0)
         bmItem
           .append('path')
-          .attr('d', 'M3.5,0.5 L5.5,2.5 L9.5,-2.5')
+          .attr('d', 'M10,0.5 L12,2.5 L16,-2.5')
           .attr('fill', 'none')
           .attr('stroke', 'white')
           .attr('stroke-width', 1.5);
@@ -612,7 +612,7 @@ function drawRadarChart(
 
       bmItem
         .append('text')
-        .attr('x', 20)
+        .attr('x', 26.5)
         .attr('y', 0)
         .attr('dy', '0.35em')
         .style('font-size', '10px')
@@ -750,7 +750,7 @@ function drawRadarChart(
       // Checkbox square
       bmItem
         .append('rect')
-        .attr('x', 0)
+        .attr('x', 1)
         .attr('y', -5) // Centered vertically around y=0
         .attr('width', 10)
         .attr('height', 10)
@@ -763,10 +763,10 @@ function drawRadarChart(
         .attr('stroke-width', 1.5);
 
       if (isActive) {
-        // Checkmark perfectly centered in the 10x10 rect (center 5,0)
+        // Checkmark perfectly centered in the 10x10 rect (center 6,0)
         bmItem
           .append('path')
-          .attr('d', 'M2.5,0.5 L4.5,2.5 L7.5,-2')
+          .attr('d', 'M3.5,0.5 L5.5,2.5 L8.5,-2')
           .attr('fill', 'none')
           .attr('stroke', 'white')
           .attr('stroke-width', 1.5);
@@ -774,7 +774,7 @@ function drawRadarChart(
 
       bmItem
         .append('text')
-        .attr('x', 16)
+        .attr('x', 17)
         .attr('y', 0)
         .attr('dy', '0.35em')
         .style('font-size', '8px')
