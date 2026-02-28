@@ -1,11 +1,11 @@
 {
   "official": [
     {
-      "id": "llama-4-maverick-twinkle-eval-v1",
-      "label": "Llama 4 Maverick — Twinkle Eval V1",
+      "id": "llama-4-maverick-fp8-twinkle-eval-v1",
+      "label": "Llama 4 Maverick FP8 — Twinkle Eval V1",
       "provider": "Meta",
-      "modelId": "meta-llama/Llama-4-Maverick-17B-128E-Instruct",
-      "modelName": "llama-4-maverick",
+      "modelId": "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8",
+      "modelName": "llama-4-maverick-FP8",
       "variance": "default",
       "openSource": true,
       "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/llama-4-eval-logs-and-scores/tree/main/results/maverick"
@@ -113,6 +113,16 @@
       "variance": "default",
       "openSource": true,
       "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/mistral-675b-eval-logs-and-scores/tree/main/results/mistralai__Mistral-Large-3-675B-Instruct-2512/default"
+    },
+    {
+      "id": "Ministral-3-14B-Instruct-2512-twinkle-eval-v1",
+      "label": "Ministral 3 14B Instruct 2512 — Twinkle Eval V1",
+      "provider": "Mistral AI",
+      "modelName": "Ministral-3-14B",
+      "modelId": "mistralai/Ministral-3-14B-Instruct-2512",
+      "variance": "default",
+      "openSource": true,
+      "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/ministral-14b-eval-logs-and-scores/tree/main/results/mistralai__Ministral-3-14B-Instruct-2512/default"
     }
   ],
   "ui": {
