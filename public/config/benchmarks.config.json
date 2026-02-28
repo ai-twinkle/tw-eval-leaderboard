@@ -28,6 +28,7 @@
       "modelId": "openai/gpt-oss-120b",
       "variance": "low",
       "openSource": true,
+      "defaultNoneActive": true,
       "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/gpt-oss-eval-logs-and-scores/tree/main/results/gpt-oss-120b/low"
     },
     {
@@ -48,6 +49,7 @@
       "modelId": "openai/gpt-oss-120b",
       "variance": "high",
       "openSource": true,
+      "defaultNoneActive": true,
       "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/gpt-oss-eval-logs-and-scores/tree/main/results/gpt-oss-120b/high"
     },
     {
@@ -58,6 +60,7 @@
       "modelId": "openai/gpt-oss-20b",
       "variance": "low",
       "openSource": true,
+      "defaultNoneActive": true,
       "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/gpt-oss-eval-logs-and-scores/tree/main/results/gpt-oss-20b/low"
     },
     {
@@ -78,6 +81,7 @@
       "modelId": "openai/gpt-oss-20b",
       "variance": "high",
       "openSource": true,
+      "defaultNoneActive": true,
       "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/gpt-oss-eval-logs-and-scores/tree/main/results/gpt-oss-20b/high"
     },
     {

@@ -61,7 +61,9 @@ export const Home: React.FC = () => {
 
   // Auto-select new sources
   useEffect(() => {
-    const newSourceIds = sources.map((s) => s.id);
+    const newSourceIds = sources
+      .filter((s) => !s.defaultNoneActive)
+      .map((s) => s.id);
     setSelectedSourceIds(newSourceIds);
   }, [sources]);
 
@@ -146,6 +148,7 @@ export const Home: React.FC = () => {
             openSource: benchmark.openSource,
             timestamp,
             isOfficial: true,
+            defaultNoneActive: benchmark.defaultNoneActive,
             data: validation.data || data,
             rawData: data,
           };

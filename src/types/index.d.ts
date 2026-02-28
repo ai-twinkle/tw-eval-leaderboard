@@ -25,9 +25,11 @@ export const BenchmarkConfigSchema = z.object({
       label: z.string(),
       provider: z.string(),
       modelName: z.string(),
+      modelId: z.string(),
       variance: z.string(),
       openSource: z.boolean(),
       hfFolderUrl: z.string(),
+      defaultNoneActive: z.boolean().optional(),
     }),
   ),
   ui: z.object({
@@ -52,6 +54,7 @@ export interface DataSource {
   openSource: boolean;
   timestamp: string;
   isOfficial: boolean;
+  defaultNoneActive?: boolean;
   data: unknown;
   rawData: unknown;
 }

@@ -22,6 +22,7 @@
     "uploadFiles": "上傳 JSON/JSONL 檔案",
     "selectModels": "選擇要比較的模型",
     "all": "全選",
+    "default": "預設",
     "none": "取消",
     "searchPlaceholder": "搜尋模型...",
     "official": "官方",

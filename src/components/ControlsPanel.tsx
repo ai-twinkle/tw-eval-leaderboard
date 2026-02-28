@@ -45,6 +45,12 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
     onSourceSelectionChange(sources.map((s) => s.id));
   };
 
+  const handleSelectDefault = () => {
+    onSourceSelectionChange(
+      sources.filter((s) => !s.defaultNoneActive).map((s) => s.id),
+    );
+  };
+
   const handleClearAll = () => {
     onSourceSelectionChange([]);
   };
@@ -150,6 +156,15 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
                   className='!p-0 !h-auto !text-xs'
                 >
                   {t('controls.all')}
+                </Button>
+                <span className='text-gray-300'>|</span>
+                <Button
+                  type='link'
+                  size='small'
+                  onClick={handleSelectDefault}
+                  className='!p-0 !h-auto !text-xs'
+                >
+                  {t('controls.default', 'Default')}
                 </Button>
                 <span className='text-gray-300'>|</span>
                 <Button

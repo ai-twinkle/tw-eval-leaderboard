@@ -22,6 +22,7 @@
     "uploadFiles": "Upload JSON/JSONL Files",
     "selectModels": "Select Models to Compare",
     "all": "All",
+    "default": "Default",
     "none": "None",
     "searchPlaceholder": "Search models...",
     "official": "Official",
