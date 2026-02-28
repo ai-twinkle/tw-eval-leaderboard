@@ -307,7 +307,7 @@ export const Home: React.FC = () => {
               <img
                 src={`${import.meta.env.BASE_URL}twinkle-ai.webp`}
                 alt='Twinkle AI Logo'
-                className='w-8 h-8 lg:w-10 lg:h-10 rounded-lg shadow-md flex-shrink-0'
+                className='w-8 h-8 lg:w-10 lg:h-10 rounded-full shadow-md flex-shrink-0'
               />
               <div className='flex flex-col justify-center min-w-0'>
                 <h1 className='text-lg lg:text-xl font-bold !mb-0 text-gradient truncate leading-tight'>
