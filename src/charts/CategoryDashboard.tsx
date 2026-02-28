@@ -473,14 +473,30 @@ export const CategoryDashboard: React.FC<CategoryDashboardProps> = ({
     sortedTests.forEach((test) => {
       const testY = yScale(test.testName) || 0;
 
-      sources.forEach((source) => {
+      // Sort sources by avg accuracy for this specific test
+      const sortedSourcesForTest = [...sources].sort((a, b) => {
+        const statsA = test.values.get(getSourceIdentifier(a));
+        const statsB = test.values.get(getSourceIdentifier(b));
+        const avgA = statsA ? statsA.avg : -1;
+        const avgB = statsB ? statsB.avg : -1;
+        return avgB - avgA;
+      });
+
+      // Create a local model scale to assign Y positions based on sorted order
+      const localModelScale = d3
+        .scaleBand()
+        .domain(sortedSourcesForTest.map((s) => getSourceIdentifier(s)))
+        .range([0, yScale.bandwidth()])
+        .padding(0.1);
+
+      sortedSourcesForTest.forEach((source) => {
         const sourceId = getSourceIdentifier(source);
         const stats = test.values.get(sourceId);
         if (!stats) return;
 
         const isHighlighted =
           !highlightedModel || highlightedModel === sourceId;
-        const modelY = testY + (modelScale(sourceId) || 0);
+        const modelY = testY + (localModelScale(sourceId) || 0);
         const color = colorScale(sourceId) as string;
 
         // Color indicator bar (thin vertical bar on the left edge)
