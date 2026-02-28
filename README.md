@@ -146,6 +146,28 @@ JSONL format is also supported (one JSON object per line).
   main.tsx                          # Entry point
 ```
 
+## Citation
+
+If you use this evaluation tool or the Twinkle Eval benchmarks in your research, please cite:
+
+```bibtex
+@misc{twinkle_eval,
+  author       = {Teds Lin, Liang Hsun Huang, Min Yi Chen and Dave Sung},
+  title        = {Twinkle Eval: An Efficient and Accurate AI Evaluation Tool.},
+  year         = {2025},
+  url          = {https://github.com/ai-twinkle/Eval},
+  note         = {GitHub repository}
+}
+
+@misc{twinkle_eval_leaderboard,
+  author       = {Ren Di Wu},
+  title        = {Twinkle Eval Leaderboard: Official Benchmark Leaderboard and Visualizer.},
+  year         = {2026},
+  url          = {https://github.com/ai-twinkle/tw-eval-leaderboard},
+  note         = {GitHub repository}
+}
+```
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
