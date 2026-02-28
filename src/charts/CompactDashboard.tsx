@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import * as d3 from 'd3';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
@@ -48,8 +48,11 @@ function drawRadarChart(
   scale0100: boolean,
   highlightedModel: string | null,
   selectedCategory: string | null,
+  activeBenchmarks: Set<string>,
+  availableBenchmarks: string[],
   onCategoryClick: (category: string) => void,
   onModelClick: (model: string) => void,
+  onBenchmarkToggle: (benchmark: string) => void,
   t: TFunction,
   isDarkMode: boolean,
 ) {
@@ -226,7 +229,9 @@ function drawRadarChart(
   // Prepare data for each source
   const radarData = sources.map((source) => {
     const sourceId = getSourceIdentifier(source);
-    const results = flattenDatasetResults(source.rawData);
+    const results = flattenDatasetResults(source.rawData).filter((r) =>
+      activeBenchmarks.has(r.category.split('/')[0]),
+    );
     const grouped = groupByCategory(results);
 
     return {
@@ -550,6 +555,79 @@ function drawRadarChart(
 
       currentY += 10; // Extra spacing between provider groups
     });
+
+    // -------- NEW DESKTOP BENCHMARK LEGEND --------
+    currentY += 20;
+
+    legendG
+      .append('text')
+      .attr('x', 0)
+      .attr('y', currentY)
+      .style('font-size', '13px')
+      .style('font-weight', 'bold')
+      .style('fill', getCssVar('--chart-text-primary'))
+      .text(t('chart.legendBenchmarks', { defaultValue: 'Benchmarks' }));
+
+    currentY += 20;
+
+    availableBenchmarks.forEach((bm) => {
+      const isActive = activeBenchmarks.has(bm);
+      const bmItem = legendG
+        .append('g')
+        .attr('transform', `translate(10, ${currentY})`)
+        .style('cursor', 'pointer')
+        .style('opacity', isActive ? 1 : 0.4)
+        .on('click', () => onBenchmarkToggle(bm))
+        .on('mouseenter', function () {
+          d3.select(this).style('opacity', 1);
+        })
+        .on('mouseleave', function () {
+          d3.select(this).style('opacity', isActive ? 1 : 0.4);
+        });
+
+      // Checkbox square
+      bmItem
+        .append('rect')
+        .attr('x', 0)
+        .attr('y', -6)
+        .attr('width', 12)
+        .attr('height', 12)
+        .attr('rx', 3)
+        .attr('fill', isActive ? '#1890ff' : 'transparent')
+        .attr(
+          'stroke',
+          isActive ? '#1890ff' : getCssVar('--chart-text-secondary'),
+        )
+        .attr('stroke-width', 1.5);
+
+      if (isActive) {
+        // Checkmark perfectly centered in the 12x12 rect (center 6,0)
+        bmItem
+          .append('path')
+          .attr('d', 'M3.5,0.5 L5.5,2.5 L9.5,-2.5')
+          .attr('fill', 'none')
+          .attr('stroke', 'white')
+          .attr('stroke-width', 1.5);
+      }
+
+      bmItem
+        .append('text')
+        .attr('x', 20)
+        .attr('y', 0)
+        .attr('dy', '0.35em')
+        .style('font-size', '10px')
+        .style('font-weight', isActive ? 'bold' : 'normal')
+        .style('fill', isActive ? '#1890ff' : getCssVar('--chart-text-primary'))
+        .text(bm);
+
+      bmItem
+        .append('title')
+        .text(
+          `${bm}\n${t('chart.clickToToggle', { defaultValue: 'Click to toggle' })}`,
+        );
+
+      currentY += 20;
+    });
   } else {
     // Mobile legend - rendered at bottom as a compact horizontal list
     const mobileRadius = radius;
@@ -637,10 +715,87 @@ function drawRadarChart(
       currentX += itemWidth;
     });
 
-    // Dynamically update SVG height to fit the mobile legend
-    const requiredHeight = rowY + mobileLegendY + 40;
+    // -------- NEW MOBILE BENCHMARK LEGEND --------
+    rowY += 40; // Space between model legend and benchmark legend
+
+    mobileLegendG
+      .append('text')
+      .attr('x', 0)
+      .attr('y', rowY)
+      .style('font-size', '11px')
+      .style('font-weight', 'bold')
+      .style('fill', getCssVar('--chart-text-primary'))
+      .text(t('chart.legendBenchmarks', { defaultValue: 'Benchmarks' }));
+
+    rowY += 20;
+    currentX = 0;
+
+    availableBenchmarks.forEach((bm) => {
+      const isActive = activeBenchmarks.has(bm);
+      const itemWidth = bm.length * 6 + 30; // 12 for checkbox + 18 for spacing/text
+
+      // Check if item fits on current row
+      if (currentX + itemWidth > maxWidth && currentX > 0) {
+        currentX = 0;
+        rowY += 18;
+      }
+
+      const bmItem = mobileLegendG
+        .append('g')
+        .attr('transform', `translate(${currentX}, ${rowY})`)
+        .style('cursor', 'pointer')
+        .style('opacity', isActive ? 1 : 0.4)
+        .on('click', () => onBenchmarkToggle(bm));
+
+      // Checkbox square
+      bmItem
+        .append('rect')
+        .attr('x', 0)
+        .attr('y', -5) // Centered vertically around y=0
+        .attr('width', 10)
+        .attr('height', 10)
+        .attr('rx', 2)
+        .attr('fill', isActive ? '#1890ff' : 'transparent')
+        .attr(
+          'stroke',
+          isActive ? '#1890ff' : getCssVar('--chart-text-secondary'),
+        )
+        .attr('stroke-width', 1.5);
+
+      if (isActive) {
+        // Checkmark perfectly centered in the 10x10 rect (center 5,0)
+        bmItem
+          .append('path')
+          .attr('d', 'M2.5,0.5 L4.5,2.5 L7.5,-2')
+          .attr('fill', 'none')
+          .attr('stroke', 'white')
+          .attr('stroke-width', 1.5);
+      }
+
+      bmItem
+        .append('text')
+        .attr('x', 16)
+        .attr('y', 0)
+        .attr('dy', '0.35em')
+        .style('font-size', '8px')
+        .style('font-weight', isActive ? 'bold' : 'normal')
+        .style('fill', isActive ? '#1890ff' : getCssVar('--chart-text-primary'))
+        .text(bm);
+
+      bmItem
+        .append('title')
+        .text(
+          `${bm}\n${t('chart.clickToToggle', { defaultValue: 'Click to toggle' })}`,
+        );
+
+      currentX += itemWidth;
+    });
+
+    // Dynamically update SVG height AND viewBox to fit the mobile legend
+    const requiredHeight = rowY + mobileLegendY + 60;
     if (requiredHeight > height) {
       svg.attr('height', requiredHeight);
+      svg.attr('viewBox', `0 0 ${width} ${requiredHeight}`);
     }
   } // End of legend group
 }
@@ -662,6 +817,36 @@ export const CompactDashboard: React.FC<CompactDashboardProps> = ({
   const [internalHighlightedModel, setInternalHighlightedModel] = useState<
     string | null
   >(null);
+  const [unselectedBenchmarks, setUnselectedBenchmarks] = useState<Set<string>>(
+    new Set(),
+  );
+
+  const availableBenchmarks = useMemo(() => {
+    const benchmarks = new Set<string>();
+    for (const source of sources) {
+      const results = flattenDatasetResults(source.rawData);
+      for (const result of results) {
+        benchmarks.add(result.category.split('/')[0]);
+      }
+    }
+    return Array.from(benchmarks).sort();
+  }, [sources]);
+
+  const activeBenchmarks = availableBenchmarks.filter(
+    (b) => !unselectedBenchmarks.has(b),
+  );
+
+  const toggleBenchmark = (benchmark: string) => {
+    setUnselectedBenchmarks((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(benchmark)) {
+        newSet.delete(benchmark);
+      } else {
+        newSet.add(benchmark);
+      }
+      return newSet;
+    });
+  };
 
   // Use external selected category if provided, otherwise use internal state
   const selectedCategory =
@@ -700,8 +885,12 @@ export const CompactDashboard: React.FC<CompactDashboardProps> = ({
       source: string;
     }> = [];
 
+    const activeBenchmarksSet = new Set(activeBenchmarks);
+
     for (const source of sources) {
-      const results = flattenDatasetResults(source.rawData);
+      const results = flattenDatasetResults(source.rawData).filter((r) =>
+        activeBenchmarksSet.has(r.category.split('/')[0]),
+      );
       const grouped = groupByCategory(results);
 
       for (const [category, categoryResults] of Object.entries(grouped)) {
@@ -731,7 +920,6 @@ export const CompactDashboard: React.FC<CompactDashboardProps> = ({
       })
       .sort((a, b) => b.mean - a.mean);
 
-    // Draw radar chart
     drawRadarChart(
       svg,
       categoryData,
@@ -741,6 +929,8 @@ export const CompactDashboard: React.FC<CompactDashboardProps> = ({
       scale0100,
       highlightedModel,
       selectedCategory,
+      activeBenchmarksSet,
+      availableBenchmarks,
       (category) => {
         // Update internal state if not controlled by parent
         if (externalSelectedCategory === undefined) {
@@ -765,6 +955,7 @@ export const CompactDashboard: React.FC<CompactDashboardProps> = ({
           onModelHighlight(highlightedModel === model ? null : model);
         }
       },
+      (benchmark) => toggleBenchmark(benchmark),
       t,
       isDarkMode,
     );
@@ -781,6 +972,7 @@ export const CompactDashboard: React.FC<CompactDashboardProps> = ({
     internalSelectedCategory,
     internalHighlightedModel,
     isDarkMode, // Re-render chart when theme changes
+    unselectedBenchmarks,
   ]);
 
   if (sources.length === 0) {
