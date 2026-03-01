@@ -133,6 +133,16 @@
       "variance": "default",
       "openSource": true,
       "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/gemma-3-27b-it-eval-logs-and-scores/tree/main/results/google__gemma-3-27b-it/default"
+    },
+    {
+      "id": "gemma-3-4B-T1-it-twinkle-eval-v1",
+      "label": "Gemma 3 4B T1 IT — Twinkle Eval V1",
+      "provider": "Twinkle AI",
+      "modelName": "gemma-3-4B-T1-it",
+      "modelId": "twinkle-ai/gemma-3-4B-T1-it",
+      "variance": "default",
+      "openSource": true,
+      "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/gemma-3-4B-T1-it-eval-logs-and-scores/tree/main/results/twinkle-ai__gemma-3-4B-T1-it/default"
     }
   ],
   "ui": {
