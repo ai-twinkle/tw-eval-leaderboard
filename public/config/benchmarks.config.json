@@ -123,6 +123,16 @@
       "variance": "default",
       "openSource": true,
       "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/ministral-14b-eval-logs-and-scores/tree/main/results/mistralai__Ministral-3-14B-Instruct-2512/default"
+    },
+    {
+      "id": "gemma-3-27b-it-twinkle-eval-v1",
+      "label": "Gemma 3 27B IT — Twinkle Eval V1",
+      "provider": "Google",
+      "modelName": "gemma-3-27b-it",
+      "modelId": "google/gemma-3-27b-it",
+      "variance": "default",
+      "openSource": true,
+      "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/gemma-3-27b-it-eval-logs-and-scores/tree/main/results/google__gemma-3-27b-it/default"
     }
   ],
   "ui": {
