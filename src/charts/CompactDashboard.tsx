@@ -628,6 +628,13 @@ function drawRadarChart(
 
       currentY += 20;
     });
+
+    // Dynamically update SVG height AND viewBox to fit the desktop legend
+    const requiredHeight = 100 + currentY + 40;
+    if (requiredHeight > height) {
+      svg.attr('height', requiredHeight);
+      svg.attr('viewBox', `0 0 ${width} ${requiredHeight}`);
+    }
   } else {
     // Mobile legend - rendered at bottom as a compact horizontal list
     const mobileRadius = radius;
