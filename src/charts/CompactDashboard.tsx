@@ -262,7 +262,17 @@ function drawRadarChart(
     .curve(d3.curveLinearClosed); // Use curveLinearClosed for proper polygon closure
 
   // Draw radar blobs
-  radarData.forEach((data, idx) => {
+  // Sort data so the lowest performance model (lowest avg/sum of values) is rendered last (on top layer)
+  const sortedRadarData = radarData
+    .map((data, idx) => ({ ...data, originalIdx: idx }))
+    .sort((a, b) => {
+      const sumA = d3.sum(a.values, (v) => v.value);
+      const sumB = d3.sum(b.values, (v) => v.value);
+      return sumB - sumA;
+    });
+
+  sortedRadarData.forEach((data) => {
+    const idx = data.originalIdx;
     const color = colorScale(idx.toString());
     const isHighlighted = !highlightedModel || highlightedModel === data.source;
     const opacity = isHighlighted ? 1 : 0.2;
