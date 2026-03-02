@@ -893,10 +893,29 @@ export const CompactDashboard: React.FC<CompactDashboardProps> = ({
       testId: string;
     }> = [];
 
+    const globalResults: Array<{
+      category: string;
+      accuracy: number;
+    }> = [];
+
     const activeBenchmarksSet = new Set(activeBenchmarks);
 
     for (const source of sources) {
-      const results = flattenDatasetResults(source.rawData).filter((r) =>
+      const allSourceResults = flattenDatasetResults(source.rawData);
+
+      // Global results (all benchmarks) for consistent ordering
+      const globalGrouped = groupByCategory(allSourceResults);
+      for (const [category, categoryResults] of Object.entries(globalGrouped)) {
+        for (const result of categoryResults) {
+          globalResults.push({
+            category,
+            accuracy: result.accuracy_mean,
+          });
+        }
+      }
+
+      // Filtered results (active benchmarks only)
+      const results = allSourceResults.filter((r) =>
         activeBenchmarksSet.has(r.category.split('/')[0]),
       );
       const grouped = groupByCategory(results);
@@ -913,22 +932,32 @@ export const CompactDashboard: React.FC<CompactDashboardProps> = ({
       }
     }
 
-    // Calculate category stats
-    const categoryStats = d3.group(allResults, (d) => d.category);
-    const categories = Array.from(categoryStats.keys()).sort();
+    // Determine consistent category order based on ALL benchmarks
+    const globalCategoryStats = d3.group(globalResults, (d) => d.category);
+    const globalOrder = Array.from(globalCategoryStats.keys()).sort((a, b) => {
+      const aMean =
+        d3.mean(globalCategoryStats.get(a)!.map((t) => t.accuracy)) || 0;
+      const bMean =
+        d3.mean(globalCategoryStats.get(b)!.map((t) => t.accuracy)) || 0;
+      return bMean - aMean;
+    });
 
-    const categoryData: CategoryData[] = categories
-      .map((cat) => {
-        const tests = categoryStats.get(cat) || [];
-        const accuracies = tests.map((t) => t.accuracy);
-        const uniqueTests = new Set(tests.map((t) => t.testId));
-        return {
-          category: cat as CategoryKey,
-          mean: d3.mean(accuracies) || 0,
-          count: uniqueTests.size,
-        };
-      })
-      .sort((a, b) => b.mean - a.mean);
+    // Calculate category stats (only for active benchmarks)
+    const categoryStats = d3.group(allResults, (d) => d.category);
+
+    // Filter categories that exist in the active set, preserving the global order
+    const categories = globalOrder.filter((cat) => categoryStats.has(cat));
+
+    const categoryData: CategoryData[] = categories.map((cat) => {
+      const tests = categoryStats.get(cat) || [];
+      const accuracies = tests.map((t) => t.accuracy);
+      const uniqueTests = new Set(tests.map((t) => t.testId));
+      return {
+        category: cat as CategoryKey,
+        mean: d3.mean(accuracies) || 0,
+        count: uniqueTests.size,
+      };
+    });
 
     drawRadarChart(
       svg,
