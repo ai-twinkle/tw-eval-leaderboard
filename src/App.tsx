@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 import enUS from 'antd/locale/en_US';
 import zhTW from 'antd/locale/zh_TW';
 import { Home } from './pages/Home';
-import { ThemeProvider, useTheme } from './contexts/ThemeContext';
+import { ThemeProvider } from './contexts/ThemeProvider';
+import { useTheme } from './contexts/ThemeContext';
 import './i18n/config';
 
 // Light theme tokens
