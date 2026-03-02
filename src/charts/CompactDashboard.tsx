@@ -89,7 +89,9 @@ function drawRadarChart(
   const angleSlice = (Math.PI * 2) / total;
 
   // Color scale
-  const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+  const colorScale = d3
+    .scaleOrdinal(d3.schemeCategory10)
+    .domain(sources.map((_, i) => i.toString()));
 
   // Radius scale
   const rScale = d3.scaleLinear().domain([0, 1]).range([0, radius]);
