@@ -20,6 +20,7 @@ import {
   CloseOutlined,
   SunOutlined,
   MoonOutlined,
+  RocketOutlined,
 } from '@ant-design/icons';
 import { useTheme } from '../contexts/ThemeContext';
 import { useTranslation } from 'react-i18next';
@@ -331,6 +332,27 @@ export const Home: React.FC = () => {
 
           {/* Controls */}
           <Space size={'small'} className='flex-shrink-0'>
+            {/* Run Your Own Eval Link */}
+            <div className='hidden lg:block'>
+              <Tooltip title={t('app.runOwnResult')}>
+                <Button
+                  variant={'text'}
+                  size='small'
+                  href='https://github.com/ai-twinkle/Eval'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  icon={<RocketOutlined className={'!text-lg'} />}
+                  className={
+                    '!border-none hover:!bg-yellow-50 dark:hover:!bg-yellow-900/20 flex items-center'
+                  }
+                >
+                  <span className='font-medium ml-1'>
+                    {t('app.runOwnResult')}
+                  </span>
+                </Button>
+              </Tooltip>
+            </div>
+
             {/* Language Switcher - desktop only */}
             <div className='hidden lg:block'>
               <LanguageSwitcher />

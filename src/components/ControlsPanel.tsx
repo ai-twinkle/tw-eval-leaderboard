@@ -8,6 +8,7 @@ import {
   UploadOutlined,
   SunOutlined,
   MoonOutlined,
+  RocketOutlined,
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { FileUploader } from './FileUploader';
@@ -122,6 +123,23 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
                   </Button>
                 </div>
               )}
+
+              {/* Run Your Own Eval Link (Mobile) */}
+              <div className='flex items-center justify-between'>
+                <span className='text-xs text-gray-500'>
+                  {t('controls.eval')}
+                </span>
+                <Button
+                  href='https://github.com/ai-twinkle/Eval'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  icon={<RocketOutlined />}
+                  size='small'
+                  className='flex items-center border-amber-200 text-amber-700 hover:!text-amber-600 hover:!border-amber-400'
+                >
+                  {t('app.runOwnResult')}
+                </Button>
+              </div>
             </div>
           </div>
           <Divider className='!my-3' />

@@ -12,7 +12,8 @@
     "subtitle": "語言模型評測視覺化工具",
     "viewOnGithub": "在 GitHub 上查看",
     "poweredBy": "由",
-    "builtFor": "為卓越評測打造"
+    "builtFor": "為卓越評測打造",
+    "runOwnResult": "執行您自己的評測"
   },
   "controls": {
     "title": "控制面板",
@@ -28,7 +29,8 @@
     "official": "官方",
     "scale": "比例",
     "exportCSV": "匯出 CSV",
-    "pivotTable": "樞紐表"
+    "pivotTable": "樞紐表",
+    "eval": "評測"
   },
   "view": {
     "dashboard": "儀表板",

@@ -12,7 +12,8 @@
     "subtitle": "Language Model Benchmark Visualizer",
     "viewOnGithub": "View on GitHub",
     "poweredBy": "Powered by",
-    "builtFor": "Built for benchmark excellence"
+    "builtFor": "Built for benchmark excellence",
+    "runOwnResult": "Run your own result"
   },
   "controls": {
     "title": "Controls",
@@ -28,7 +29,8 @@
     "official": "Official",
     "scale": "Scale",
     "exportCSV": "Export CSV",
-    "pivotTable": "Pivot Table"
+    "pivotTable": "Pivot Table",
+    "eval": "Eval"
   },
   "view": {
     "dashboard": "Dashboard",
