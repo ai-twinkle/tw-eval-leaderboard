@@ -143,7 +143,7 @@ export const Home: React.FC = () => {
             label: benchmark.label,
             provider: benchmark.provider,
             modelName,
-            modelId: rawModelName,
+            modelId: benchmark.modelId || rawModelName,
             variance: benchmark.variance,
             openSource: benchmark.openSource,
             timestamp,
