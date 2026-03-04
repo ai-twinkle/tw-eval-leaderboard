@@ -333,7 +333,7 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
             {/* Model list */}
             <div
               className={
-                (hideHeader ? 'max-h-85' : 'max-h-70') +
+                (hideHeader ? 'max-h-85' : 'max-h-60') +
                 ' overflow-y-auto space-y-3 pr-1'
               }
             >
@@ -344,7 +344,7 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
                       <span className='w-2 h-2 rounded-full bg-amber-400' />
                       {provider}
                     </div>
-                    <div className='space-y-1.5'>
+                    <div className='space-y-1'>
                       {providerSources.map((source) => (
                         <div
                           key={source.id}
@@ -363,8 +363,9 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
                               handleToggleSource(source.id, e.target.checked);
                             }}
                             onClick={(e) => e.stopPropagation()}
+                            className='!text-xs'
                           >
-                            <span className='text-sm font-medium text-gray-700'>
+                            <span className='text-xs font-medium text-gray-700'>
                               {source.modelId ? (
                                 <a
                                   href={`https://huggingface.co/${source.modelId}`}
@@ -379,7 +380,7 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
                               )}
                             </span>
                           </Checkbox>
-                          <div className='flex items-center gap-1.5 mt-1 ml-6'>
+                          <div className='flex items-center gap-1 mt-0.5 ml-6'>
                             <span className='badge-size'>
                               {formatSizeB(parseSize(source.size))}
                             </span>
@@ -397,7 +398,7 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
                               </span>
                             )}
                           </div>
-                          <div className='text-xs text-gray-400 mt-1 ml-6'>
+                          <div className='text-[10px] text-gray-400 mt-0.5 ml-6'>
                             {source.timestamp}
                           </div>
                         </div>

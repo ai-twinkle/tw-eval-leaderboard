@@ -21,7 +21,7 @@
     "language": "Language / 語言",
     "theme": "Theme",
     "uploadFiles": "Upload JSON/JSONL Files",
-    "selectModels": "Select Models to Compare",
+    "selectModels": "Select Models",
     "all": "All",
     "default": "Default",
     "none": "None",

@@ -481,9 +481,9 @@ h6 {
     var(--color-primary-dark) 100%
   );
   color: white;
-  padding: 2px 8px;
+  padding: 1px 6px;
   border-radius: 4px;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -492,9 +492,9 @@ h6 {
 .badge-oss {
   background: linear-gradient(135deg, #52c41a 0%, #389e0d 100%);
   color: white;
-  padding: 2px 8px;
+  padding: 1px 6px;
   border-radius: 4px;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -503,9 +503,9 @@ h6 {
 .badge-size {
   background: linear-gradient(135deg, #36cfc9 0%, #13a8a8 100%);
   color: white;
-  padding: 2px 7px;
+  padding: 1px 6px;
   border-radius: 4px;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.3px;
   white-space: nowrap;
@@ -516,8 +516,8 @@ h6 {
    ============================================ */
 
 .model-card {
-  padding: 8px 12px;
-  border-radius: 8px;
+  padding: 4px 8px;
+  border-radius: 6px;
   background: rgba(255, 255, 255, 0.5);
   border: 1px solid var(--color-border-subtle);
   transition: var(--transition-fast);
