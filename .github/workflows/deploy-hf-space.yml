@@ -39,6 +39,8 @@ jobs:
           sdk: static
           pinned: false
           app_file: index.html
+          license: mit
+          short_description: Official Benchmark Leaderboard for Twinkle Eval
           ---
           EOF
 
