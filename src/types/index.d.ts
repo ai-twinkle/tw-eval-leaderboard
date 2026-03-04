@@ -26,6 +26,7 @@ export const BenchmarkConfigSchema = z.object({
       provider: z.string(),
       modelName: z.string(),
       modelId: z.string(),
+      size: z.union([z.number(), z.string()]),
       variance: z.string(),
       openSource: z.boolean(),
       hfFolderUrl: z.string(),
@@ -50,6 +51,7 @@ export interface DataSource {
   provider: string;
   modelName: string;
   modelId: string;
+  size: number | string;
   variance: string;
   openSource: boolean;
   timestamp: string;
