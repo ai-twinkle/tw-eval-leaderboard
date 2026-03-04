@@ -28,6 +28,20 @@ jobs:
           VITE_BASE_PATH: './'
         run: npm run build
 
+      - name: Create Hugging Face Space README
+        run: |
+          cat << 'EOF' > dist/README.md
+          ---
+          title: Twinkle Evaluator Leaderboard
+          emoji: 📊
+          colorFrom: blue
+          colorTo: indigo
+          sdk: static
+          pinned: false
+          app_file: index.html
+          ---
+          EOF
+
       - name: Push to Hugging Face
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
