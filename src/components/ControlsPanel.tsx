@@ -1,5 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Switch, Checkbox, Divider, Button, Input, Slider } from 'antd';
+import {
+  Switch,
+  Checkbox,
+  Divider,
+  Button,
+  Input,
+  Slider,
+  AutoComplete,
+} from 'antd';
 import {
   SlidersOutlined,
   CheckSquareOutlined,
@@ -147,6 +155,18 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
       onSourceSelectionChange(selectedSourceIds.filter((sid) => sid !== id));
     }
   };
+
+  // ── AutoComplete Options ──────────────────────────────────────────────────
+  const searchOptions = useMemo(() => {
+    const uniqueTerms = new Set<string>();
+    sources.forEach((s) => {
+      if (s.modelName) uniqueTerms.add(s.modelName);
+      if (s.provider) uniqueTerms.add(s.provider);
+    });
+    return Array.from(uniqueTerms)
+      .sort()
+      .map((term) => ({ value: term }));
+  }, [sources]);
 
   // ── Filtering ─────────────────────────────────────────────────────────────
   const filteredSources = sources.filter((source) => {
@@ -320,15 +340,24 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
             </div>
 
             {/* Search */}
-            <Input
-              placeholder={t('controls.searchPlaceholder')}
-              prefix={<SearchOutlined className='text-gray-400' />}
+            <AutoComplete
+              options={searchOptions}
               value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-              allowClear
-              className='mb-3'
-              size='small'
-            />
+              onChange={setSearchText}
+              filterOption={(inputValue, option) =>
+                option!.value
+                  .toUpperCase()
+                  .indexOf(inputValue.toUpperCase()) !== -1
+              }
+              className='mb-3 w-full'
+            >
+              <Input
+                placeholder={t('controls.searchPlaceholder')}
+                prefix={<SearchOutlined className='text-gray-400' />}
+                allowClear
+                size='small'
+              />
+            </AutoComplete>
 
             {/* Model list */}
             <div
