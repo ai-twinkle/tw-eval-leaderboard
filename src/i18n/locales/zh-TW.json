@@ -30,7 +30,9 @@
     "scale": "比例",
     "exportCSV": "匯出 CSV",
     "pivotTable": "樞紐表",
-    "eval": "評測"
+    "eval": "評測",
+    "sizeFilter": "模型大小",
+    "sizeAll": "全部大小"
   },
   "view": {
     "dashboard": "儀表板",

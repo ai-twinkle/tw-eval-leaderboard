@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Switch, Checkbox, Divider, Button, Input } from 'antd';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Switch, Checkbox, Divider, Button, Input, Slider } from 'antd';
 import {
   SlidersOutlined,
   CheckSquareOutlined,
@@ -21,6 +21,7 @@ interface ControlsPanelProps {
   sources: DataSource[];
   selectedSourceIds: string[];
   onSourceSelectionChange: (ids: string[]) => void;
+  onSizeFilterChange?: (range: [number, number]) => void;
   scale0100: boolean;
   onScaleToggle: (checked: boolean) => void;
   pivotData: PivotRow[];
@@ -29,11 +30,32 @@ interface ControlsPanelProps {
   toggleTheme?: () => void;
 }
 
+/**
+ * Intermediate mark values (B params) shown between 0 and max.
+ * Kept sparse so labels never crowd.
+ */
+const SPARSE_MARKS = [7, 30, 100];
+
+/**
+ * Full milestone list used only to snap max up to a clean boundary.
+ */
+const ALL_MILESTONES = [3, 7, 13, 30, 70, 100, 200, 400, 700, 1000, 2000];
+
+function parseSize(size: number | string): number {
+  const n = typeof size === 'string' ? parseFloat(size) : size;
+  return isNaN(n) ? 0 : n;
+}
+
+function formatSizeB(n: number): string {
+  return n === 0 ? '0' : `${n}B`;
+}
+
 export const ControlsPanel: React.FC<ControlsPanelProps> = ({
   onFilesUpload,
   sources,
   selectedSourceIds,
   onSourceSelectionChange,
+  onSizeFilterChange,
   scale0100,
   onScaleToggle,
   pivotData,
@@ -42,20 +64,82 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
   toggleTheme,
 }) => {
   const { t } = useTranslation();
-  const handleSelectAll = () => {
-    onSourceSelectionChange(sources.map((s) => s.id));
-  };
 
-  const handleSelectDefault = () => {
+  // ── Build index-based slider config ──────────────────────────────────────
+  //
+  // The antd Slider works on indices (0 … N-1), one per mark, so each step
+  // is visually equidistant — regardless of the actual B-count gap.
+  //
+  const { markValues, indexMax, antdMarks } = useMemo(() => {
+    if (sources.length === 0) {
+      return {
+        markValues: [0, 100],
+        indexMax: 1,
+        antdMarks: { 0: '0', 1: '100B' } as Record<number, string>,
+      };
+    }
+
+    const rawMax = Math.max(...sources.map((s) => parseSize(s.size)));
+
+    // Snap max up to the next clean milestone
+    let max = rawMax;
+    for (const m of ALL_MILESTONES) {
+      if (m >= rawMax) {
+        max = m;
+        break;
+      }
+    }
+    if (max < rawMax) max = Math.ceil(rawMax / 100) * 100;
+
+    // Build the ordered array of actual B values: [0, ...sparse, max]
+    const values: number[] = [0];
+    for (const m of SPARSE_MARKS) {
+      if (m < max) values.push(m);
+    }
+    values.push(max);
+
+    // antd marks: index → label string
+    const marks: Record<number, string> = {};
+    values.forEach((v, i) => {
+      marks[i] = formatSizeB(v);
+    });
+
+    return {
+      markValues: values,
+      indexMax: values.length - 1,
+      antdMarks: marks,
+    };
+  }, [sources]);
+
+  // ── State ─────────────────────────────────────────────────────────────────
+  const [searchText, setSearchText] = useState('');
+  const [indexRange, setIndexRange] = useState<[number, number]>([0, indexMax]);
+
+  // When sources load / config changes, reset to "show all"
+  useEffect(() => {
+    setIndexRange([0, indexMax]);
+  }, [indexMax]);
+
+  // ── Derive actual B values for filtering ──────────────────────────────────
+  const minSize = markValues[indexRange[0]] ?? 0;
+  const maxSize =
+    markValues[indexRange[1]] ?? markValues[markValues.length - 1];
+  const isFiltered = indexRange[0] > 0 || indexRange[1] < indexMax;
+
+  // Notify parent whenever size range changes
+  useEffect(() => {
+    onSizeFilterChange?.([minSize, maxSize]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [minSize, maxSize]);
+
+  // ── Handlers ──────────────────────────────────────────────────────────────
+  const handleSelectAll = () =>
+    onSourceSelectionChange(sources.map((s) => s.id));
+  const handleSelectDefault = () =>
     onSourceSelectionChange(
       sources.filter((s) => !s.defaultNoneActive).map((s) => s.id),
     );
-  };
-
-  const handleClearAll = () => {
-    onSourceSelectionChange([]);
-  };
-
+  const handleClearAll = () => onSourceSelectionChange([]);
   const handleToggleSource = (id: string, checked: boolean) => {
     if (checked) {
       onSourceSelectionChange([...selectedSourceIds, id]);
@@ -64,26 +148,23 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
     }
   };
 
-  const [searchText, setSearchText] = useState('');
-
+  // ── Filtering ─────────────────────────────────────────────────────────────
   const filteredSources = sources.filter((source) => {
-    const searchLower = searchText.toLowerCase();
+    const n = parseSize(source.size);
+    if (n < minSize || n > maxSize) return false;
+    const q = searchText.toLowerCase();
     return (
-      source.provider.toLowerCase().includes(searchLower) ||
-      source.modelName.toLowerCase().includes(searchLower) ||
-      source.variance.toLowerCase().includes(searchLower) ||
-      source.timestamp.toLowerCase().includes(searchLower)
+      source.provider.toLowerCase().includes(q) ||
+      source.modelName.toLowerCase().includes(q) ||
+      source.variance.toLowerCase().includes(q) ||
+      source.timestamp.toLowerCase().includes(q)
     );
   });
 
-  // Group filtered sources by provider
   const groupedByProvider = filteredSources.reduce(
     (acc, source) => {
-      const provider = source.provider;
-      if (!acc[provider]) {
-        acc[provider] = [];
-      }
-      acc[provider].push(source);
+      if (!acc[source.provider]) acc[source.provider] = [];
+      acc[source.provider].push(source);
       return acc;
     },
     {} as Record<string, DataSource[]>,
@@ -91,10 +172,9 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
 
   return (
     <div className='p-5'>
-      {/* Mobile Quick Actions - Language Switcher (shown when hideHeader is true, i.e. in drawer) */}
+      {/* ── Mobile Settings (drawer only) ── */}
       {hideHeader && (
         <>
-          {/* Settings Section */}
           <div className='mb-5'>
             <div className='section-header text-sm mb-3'>
               <SlidersOutlined className='!text-amber-500' />
@@ -108,8 +188,7 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
                 <LanguageSwitcher size={'small'} />
               </div>
 
-              {/* Theme Toggle - restored for mobile */}
-              {hideHeader && toggleTheme && isDarkMode !== undefined && (
+              {toggleTheme && isDarkMode !== undefined && (
                 <div className='flex items-center justify-between'>
                   <span className='text-xs text-gray-500'>
                     {t('controls.theme')}
@@ -124,7 +203,6 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
                 </div>
               )}
 
-              {/* Run Your Own Eval Link (Mobile) */}
               <div className='flex items-center justify-between'>
                 <span className='text-xs text-gray-500'>
                   {t('controls.eval')}
@@ -146,7 +224,7 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
         </>
       )}
 
-      {/* File Upload Section */}
+      {/* ── File Upload ── */}
       <div className='mb-5'>
         <div className='section-header text-sm mb-3'>
           <UploadOutlined className='!text-amber-500' />
@@ -157,10 +235,11 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
 
       <Divider className='!my-3' />
 
-      {/* Model Selection for Comparison */}
+      {/* ── Model Selection ── */}
       {sources.length > 0 && (
         <>
           <div className='mb-5'>
+            {/* Header row */}
             <div className='flex items-center justify-between mb-3'>
               <div className='section-header text-sm'>
                 <CheckSquareOutlined className='!text-amber-500' />
@@ -196,6 +275,51 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
               </div>
             </div>
 
+            {/* ── Size Range Slider (index-based for equal spacing) ── */}
+            <div className='mb-3'>
+              <div className='flex items-center justify-between mb-1'>
+                <span className='text-xs text-gray-500 flex items-center gap-1'>
+                  <SlidersOutlined style={{ fontSize: '10px' }} />
+                  {t('controls.sizeFilter')}
+                </span>
+                <span className='text-xs font-medium text-amber-600'>
+                  {!isFiltered
+                    ? t('controls.sizeAll')
+                    : `${formatSizeB(minSize)} – ${formatSizeB(maxSize)}`}
+                </span>
+              </div>
+
+              <div className='px-1'>
+                <Slider
+                  range
+                  min={0}
+                  max={indexMax}
+                  step={1}
+                  value={indexRange}
+                  marks={antdMarks}
+                  onChange={(val) => setIndexRange(val as [number, number])}
+                  tooltip={{
+                    formatter: (idx) =>
+                      idx !== undefined
+                        ? formatSizeB(markValues[idx] ?? 0)
+                        : '',
+                  }}
+                />
+              </div>
+
+              {isFiltered && (
+                <div className='text-right mt-1'>
+                  <button
+                    onClick={() => setIndexRange([0, indexMax])}
+                    className='text-xs text-amber-600 hover:text-amber-700 underline cursor-pointer bg-transparent border-none p-0'
+                  >
+                    {t('controls.sizeAll')}
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Search */}
             <Input
               placeholder={t('controls.searchPlaceholder')}
               prefix={<SearchOutlined className='text-gray-400' />}
@@ -206,6 +330,7 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
               size='small'
             />
 
+            {/* Model list */}
             <div
               className={
                 (hideHeader ? 'max-h-85' : 'max-h-70') +
@@ -215,12 +340,10 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
               {Object.entries(groupedByProvider).map(
                 ([provider, providerSources]) => (
                   <div key={provider}>
-                    {/* Provider Header */}
                     <div className='text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-1'>
-                      <span className='w-2 h-2 rounded-full bg-amber-400'></span>
+                      <span className='w-2 h-2 rounded-full bg-amber-400' />
                       {provider}
                     </div>
-                    {/* Models in this provider group */}
                     <div className='space-y-1.5'>
                       {providerSources.map((source) => (
                         <div
@@ -257,6 +380,9 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
                             </span>
                           </Checkbox>
                           <div className='flex items-center gap-1.5 mt-1 ml-6'>
+                            <span className='badge-size'>
+                              {formatSizeB(parseSize(source.size))}
+                            </span>
                             {source.variance !== 'default' && (
                               <span className='text-xs text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded'>
                                 {source.variance}
@@ -280,6 +406,12 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
                   </div>
                 ),
               )}
+
+              {filteredSources.length === 0 && (
+                <div className='text-center py-4 text-xs text-gray-400'>
+                  {t('chart.noData')}
+                </div>
+              )}
             </div>
           </div>
         </>
@@ -287,7 +419,7 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
 
       <Divider className='!my-3' />
 
-      {/* Scale Toggle */}
+      {/* ── Scale Toggle ── */}
       <div className='mb-5'>
         <div className='flex items-center justify-between'>
           <div className='section-header text-sm'>
@@ -306,7 +438,7 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
 
       <Divider size={'small'} />
 
-      {/* Download Buttons */}
+      {/* ── Export CSV ── */}
       <div>
         <div className='flex items-center justify-between'>
           <div className='section-header text-sm'>

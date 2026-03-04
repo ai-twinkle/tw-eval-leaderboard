@@ -308,6 +308,48 @@ body::before {
 }
 
 /* ============================================
+   Slider Enhancements — amber palette
+   ============================================ */
+
+/* Track fill */
+.ant-slider .ant-slider-track,
+.ant-slider-track {
+  background: linear-gradient(
+    90deg,
+    var(--color-primary) 0%,
+    var(--color-primary-dark) 100%
+  ) !important;
+}
+
+/* Thumb handle */
+.ant-slider .ant-slider-handle::after {
+  box-shadow: 0 0 0 2px var(--color-primary) !important;
+  background-color: #fff !important;
+}
+
+.ant-slider .ant-slider-handle:hover::after,
+.ant-slider .ant-slider-handle:focus::after {
+  box-shadow:
+    0 0 0 2px var(--color-primary-dark),
+    0 0 6px rgba(255, 188, 0, 0.4) !important;
+}
+
+/* Marks dot */
+.ant-slider .ant-slider-dot-active {
+  border-color: var(--color-primary) !important;
+}
+
+/* Mark labels */
+.ant-slider .ant-slider-mark-text {
+  font-size: 10px !important;
+  color: var(--color-text-muted) !important;
+}
+
+.ant-slider .ant-slider-mark-text-active {
+  color: var(--color-primary-dark) !important;
+}
+
+/* ============================================
    Input Enhancements
    ============================================ */
 
@@ -456,6 +498,17 @@ h6 {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+.badge-size {
+  background: linear-gradient(135deg, #36cfc9 0%, #13a8a8 100%);
+  color: white;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
 }
 
 /* ============================================
@@ -694,6 +747,32 @@ h6 {
 
 [data-theme='dark'] .badge-oss {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme='dark'] .badge-size {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Size filter buttons in dark mode */
+[data-theme='dark'] .size-filter-btn {
+  color: var(--color-text-muted);
+  border-color: var(--color-border-subtle);
+}
+
+[data-theme='dark'] .size-filter-btn:hover {
+  background: rgba(255, 212, 0, 0.08);
+  border-color: rgba(255, 212, 0, 0.2);
+  color: var(--color-text-secondary);
+}
+
+[data-theme='dark'] .size-filter-btn.active {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-primary-dark) 100%
+  );
+  border-color: var(--color-primary-dark);
+  color: #0a0e1a;
 }
 
 /* Section Header Dark Mode */

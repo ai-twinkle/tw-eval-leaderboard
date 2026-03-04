@@ -30,7 +30,9 @@
     "scale": "Scale",
     "exportCSV": "Export CSV",
     "pivotTable": "Pivot Table",
-    "eval": "Eval"
+    "eval": "Eval",
+    "sizeFilter": "Model Size",
+    "sizeAll": "All Sizes"
   },
   "view": {
     "dashboard": "Dashboard",

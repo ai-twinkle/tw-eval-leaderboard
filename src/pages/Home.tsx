@@ -60,6 +60,9 @@ export const Home: React.FC = () => {
   // Model selection for comparison (simple multi-select)
   const [selectedSourceIds, setSelectedSourceIds] = useState<string[]>([]);
 
+  // Independent size filter range [minB, maxB] — null means show all
+  const [sizeFilter, setSizeFilter] = useState<[number, number] | null>(null);
+
   // Auto-select new sources
   useEffect(() => {
     const newSourceIds = sources
@@ -272,9 +275,18 @@ export const Home: React.FC = () => {
   }, [sources, selectedSourceIds]);
 
   // Filter selected sources for display
+  // Apply both manual selection AND independent size filter
   const selectedSources = useMemo(() => {
-    return sources.filter((s) => selectedSourceIds.includes(s.id));
-  }, [sources, selectedSourceIds]);
+    let filtered = sources.filter((s) => selectedSourceIds.includes(s.id));
+    if (sizeFilter) {
+      const [minB, maxB] = sizeFilter;
+      filtered = filtered.filter((s) => {
+        const n = typeof s.size === 'string' ? parseFloat(s.size) : s.size;
+        return !isNaN(n) && n >= minB && n <= maxB;
+      });
+    }
+    return filtered;
+  }, [sources, selectedSourceIds, sizeFilter]);
 
   // Sidebar content component (shared between desktop and mobile)
   const sidebarContent = (
@@ -283,6 +295,7 @@ export const Home: React.FC = () => {
       sources={sources}
       selectedSourceIds={selectedSourceIds}
       onSourceSelectionChange={setSelectedSourceIds}
+      onSizeFilterChange={setSizeFilter}
       scale0100={scale0100}
       onScaleToggle={setScale0100}
       pivotData={pivotData}
@@ -453,6 +466,7 @@ export const Home: React.FC = () => {
             sources={sources}
             selectedSourceIds={selectedSourceIds}
             onSourceSelectionChange={setSelectedSourceIds}
+            onSizeFilterChange={setSizeFilter}
             scale0100={scale0100}
             onScaleToggle={setScale0100}
             pivotData={pivotData}
