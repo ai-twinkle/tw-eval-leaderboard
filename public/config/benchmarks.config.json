@@ -185,7 +185,7 @@
       "label": "Gemma 3 TAIDE 12B Chat — Twinkle Eval V1",
       "provider": "TAIDE",
       "modelName": "gemma-3-taide-12b-chat",
-      "modelId": "twinkle-ai/gemma-3-taide-12b-chat",
+      "modelId": "taide/gemma-3-taide-12b-chat",
       "variance": "default",
       "openSource": true,
       "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/gemma-3-taide-12b-chat-eval-logs-and-scores/tree/main/results/taide__Gemma-3-TAIDE-12b-Chat-2602/default",
