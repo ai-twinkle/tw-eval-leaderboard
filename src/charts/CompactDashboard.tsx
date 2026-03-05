@@ -440,20 +440,20 @@ function drawRadarChart(
       .append('g')
       .attr('transform', `translate(${width - 200}, 100)`);
 
-    legendG
-      .append('text')
-      .attr('x', 0)
-      .attr('y', -10)
+    const titleText = legendG.append('text').attr('x', 0).attr('y', -10);
+
+    titleText
+      .append('tspan')
       .style('font-size', '13px')
       .style('font-weight', 'bold')
       .style('fill', getCssVar('--chart-text-primary'))
       .text(t('chart.legendModels'));
 
-    legendG
-      .append('text')
-      .attr('x', 0)
-      .attr('y', 5)
+    titleText
+      .append('tspan')
+      .attr('dx', 8)
       .style('font-size', '10px')
+      .style('font-weight', 'normal')
       .style('fill', getCssVar('--chart-text-secondary'))
       .text(t('chart.legendClickToHighlight'));
 
@@ -470,7 +470,7 @@ function drawRadarChart(
       {} as Record<string, Array<{ source: DataSource; index: number }>>,
     );
 
-    let currentY = 25;
+    let currentY = 10;
 
     // Render each provider group
     Object.entries(groupedByProvider).forEach(([provider, items]) => {
