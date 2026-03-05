@@ -282,7 +282,7 @@ export const Home: React.FC = () => {
       const [minB, maxB] = sizeFilter;
       filtered = filtered.filter((s) => {
         const n = typeof s.size === 'string' ? parseFloat(s.size) : s.size;
-        return !isNaN(n) && n >= minB && n <= maxB;
+        return isNaN(n) || (n >= minB && n <= maxB);
       });
     }
     return filtered;

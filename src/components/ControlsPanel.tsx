@@ -170,8 +170,9 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
 
   // ── Filtering ─────────────────────────────────────────────────────────────
   const filteredSources = sources.filter((source) => {
-    const n = parseSize(source.size);
-    if (n < minSize || n > maxSize) return false;
+    const rawN =
+      typeof source.size === 'string' ? parseFloat(source.size) : source.size;
+    if (!isNaN(rawN) && (rawN < minSize || rawN > maxSize)) return false;
     const q = searchText.toLowerCase();
     return (
       source.provider.toLowerCase().includes(q) ||
@@ -411,7 +412,13 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
                           </Checkbox>
                           <div className='flex items-center gap-1 mt-0.5 ml-6'>
                             <span className='badge-size'>
-                              {formatSizeB(parseSize(source.size))}
+                              {isNaN(
+                                typeof source.size === 'string'
+                                  ? parseFloat(source.size)
+                                  : Number(source.size),
+                              )
+                                ? String(source.size)
+                                : formatSizeB(parseSize(source.size))}
                             </span>
                             {source.variance !== 'default' && (
                               <span className='text-xs text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded'>
