@@ -179,6 +179,17 @@
       "openSource": true,
       "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/phi-4-eval-logs-and-scores/tree/main/results/microsoft__phi-4/default",
       "size": 14
+    },
+    {
+      "id": "gemma-3-taide-12b-chat-twinkle-eval-v1",
+      "label": "Gemma 3 TAIDE 12B Chat — Twinkle Eval V1",
+      "provider": "TAIDE",
+      "modelName": "gemma-3-taide-12b-chat",
+      "modelId": "twinkle-ai/gemma-3-taide-12b-chat",
+      "variance": "default",
+      "openSource": true,
+      "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/gemma-3-taide-12b-chat-eval-logs-and-scores/tree/main/results/taide__Gemma-3-TAIDE-12b-Chat-2602/default",
+      "size": 12
     }
   ],
   "ui": {
