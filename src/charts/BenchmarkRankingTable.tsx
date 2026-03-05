@@ -358,7 +358,7 @@ const ColumnVisibilityDropdown: React.FC<ColumnVisibilityDropdownProps> = ({
       placement='bottomRight'
     >
       <Button size='small' icon={<EyeOutlined />}>
-        {t('chart.columnVisibility')}
+        {t('chart.columnVisibility')} ({checkedKeys.length}/{allTests.length})
       </Button>
     </Dropdown>
   );
@@ -531,9 +531,31 @@ export const BenchmarkRankingTable: React.FC<RankingTableProps> = ({
       average: true,
     };
     benchmarkData.forEach((benchmark) => {
+      const grouped: Record<string, string[]> = {};
       benchmark.allTests.forEach((test) => {
-        allColumns[test] = true;
+        const category = categorizeTest(test);
+        if (!grouped[category]) {
+          grouped[category] = [];
+        }
+        grouped[category].push(test);
       });
+
+      let enabledCount = 0;
+      Object.keys(grouped)
+        .sort()
+        .forEach((category) => {
+          const tests = grouped[category];
+          if (enabledCount < 10) {
+            tests.forEach((test) => {
+              allColumns[test] = true;
+            });
+            enabledCount += tests.length;
+          } else {
+            tests.forEach((test) => {
+              allColumns[test] = false;
+            });
+          }
+        });
     });
     setVisibleColumns((prev) => {
       // Only set defaults if empty
