@@ -1,4 +1,10 @@
-import React, { useMemo, useState, useCallback } from 'react';
+import React, {
+  useMemo,
+  useState,
+  useCallback,
+  useEffect,
+  startTransition,
+} from 'react';
 import {
   Table,
   Card,
@@ -12,6 +18,7 @@ import {
   Flex,
   theme,
   Tree,
+  Skeleton,
   type TreeDataNode,
 } from 'antd';
 import {
@@ -372,6 +379,16 @@ export const BenchmarkRankingTable: React.FC<RankingTableProps> = ({
     'small',
   );
   const [pageSize, setPageSize] = useState<number>(20);
+
+  // Phase-2 render: sub-tables load in background after the overview paints
+  const [subTablesReady, setSubTablesReady] = useState(false);
+  useEffect(() => {
+    setSubTablesReady(false); // reset when sources change
+    const id = setTimeout(() => {
+      startTransition(() => setSubTablesReady(true));
+    }, 0);
+    return () => clearTimeout(id);
+  }, [sources]);
 
   const benchmarkData = useMemo((): BenchmarkData[] => {
     const benchmarkMap = new Map<
@@ -1113,89 +1130,109 @@ export const BenchmarkRankingTable: React.FC<RankingTableProps> = ({
         />
       </Card>
 
-      {benchmarkData.map((benchmark) => {
-        // Filter models by search query
-        let filteredModels = benchmark.models;
-        if (searchQuery.trim()) {
-          const query = searchQuery.toLowerCase();
-          filteredModels = benchmark.models.filter(
-            (model) =>
-              model.displayName.toLowerCase().includes(query) ||
-              model.provider.toLowerCase().includes(query) ||
-              model.modelName.toLowerCase().includes(query),
-          );
-        }
-
-        const sortedModels = [...filteredModels];
-        if (sortBy === 'modelName') {
-          sortedModels.sort((a, b) =>
-            a.displayName.localeCompare(b.displayName),
-          );
-        } else if (sortBy === 'average') {
-          sortedModels.sort((a, b) => b.average - a.average);
-        }
-
-        const avgScore =
-          sortedModels.length > 0
-            ? sortedModels.reduce((sum, model) => sum + model.average, 0) /
-              sortedModels.length
-            : 0;
-
-        return (
-          <Card
-            key={benchmark.benchmarkName}
-            title={
-              <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2'>
-                <Space wrap>
+      {!subTablesReady
+        ? benchmarkData.map((benchmark) => (
+            <Card
+              key={benchmark.benchmarkName}
+              title={
+                <Space>
                   <Text strong style={{ fontSize: 16 }}>
                     {benchmark.benchmarkName}
                   </Text>
                   <Text type='secondary' style={{ fontSize: 14 }}>
-                    ({sortedModels.length} / {benchmark.models.length}{' '}
-                    {t('chart.models')}, {benchmark.allTests.length}{' '}
-                    {t('chart.tests')}, {t('chart.avg')}:{' '}
-                    {formatValue(avgScore, scale0100)}
-                    {scale0100 ? '%' : ''})
+                    ({benchmark.models.length} {t('chart.models')},{' '}
+                    {benchmark.allTests.length} {t('chart.tests')})
                   </Text>
                 </Space>
-                <Space>
-                  <ColumnVisibilityDropdown
-                    allTests={benchmark.allTests}
-                    visibleColumns={visibleColumns}
-                    onVisibilityChange={handleBatchVisibilityChange}
-                    onShowAll={handleShowAll}
-                    onHideAll={handleHideAll}
-                  />
-                  <Dropdown
-                    menu={tableOptionsMenu}
-                    trigger={['click']}
-                    placement='bottomRight'
-                  >
-                    <Button size='small' icon={<SettingOutlined />}>
-                      {t('chart.tableOptions')}
-                    </Button>
-                  </Dropdown>
-                </Space>
-              </div>
+              }
+              className='shadow-sm !mb-6'
+            >
+              <Skeleton active paragraph={{ rows: 5 }} />
+            </Card>
+          ))
+        : benchmarkData.map((benchmark) => {
+            // Filter models by search query
+            let filteredModels = benchmark.models;
+            if (searchQuery.trim()) {
+              const query = searchQuery.toLowerCase();
+              filteredModels = benchmark.models.filter(
+                (model) =>
+                  model.displayName.toLowerCase().includes(query) ||
+                  model.provider.toLowerCase().includes(query) ||
+                  model.modelName.toLowerCase().includes(query),
+              );
             }
-            className='shadow-sm !mb-6'
-          >
-            <Table
-              columns={generateColumns(benchmark.allTests)}
-              dataSource={sortedModels}
-              pagination={{
-                defaultPageSize: pageSize,
-                pageSize: pageSize,
-                showSizeChanger: false,
-                showTotal: (total) => t('chart.totalModels', { total }),
-              }}
-              scroll={{ x: 'max-content' }}
-              size={tableSize}
-              bordered
-            />
-          </Card>
-        );
-      })}
+
+            const sortedModels = [...filteredModels];
+            if (sortBy === 'modelName') {
+              sortedModels.sort((a, b) =>
+                a.displayName.localeCompare(b.displayName),
+              );
+            } else if (sortBy === 'average') {
+              sortedModels.sort((a, b) => b.average - a.average);
+            }
+
+            const avgScore =
+              sortedModels.length > 0
+                ? sortedModels.reduce((sum, model) => sum + model.average, 0) /
+                  sortedModels.length
+                : 0;
+
+            return (
+              <Card
+                key={benchmark.benchmarkName}
+                title={
+                  <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2'>
+                    <Space wrap>
+                      <Text strong style={{ fontSize: 16 }}>
+                        {benchmark.benchmarkName}
+                      </Text>
+                      <Text type='secondary' style={{ fontSize: 14 }}>
+                        ({sortedModels.length} / {benchmark.models.length}{' '}
+                        {t('chart.models')}, {benchmark.allTests.length}{' '}
+                        {t('chart.tests')}, {t('chart.avg')}:{' '}
+                        {formatValue(avgScore, scale0100)}
+                        {scale0100 ? '%' : ''})
+                      </Text>
+                    </Space>
+                    <Space>
+                      <ColumnVisibilityDropdown
+                        allTests={benchmark.allTests}
+                        visibleColumns={visibleColumns}
+                        onVisibilityChange={handleBatchVisibilityChange}
+                        onShowAll={handleShowAll}
+                        onHideAll={handleHideAll}
+                      />
+                      <Dropdown
+                        menu={tableOptionsMenu}
+                        trigger={['click']}
+                        placement='bottomRight'
+                      >
+                        <Button size='small' icon={<SettingOutlined />}>
+                          {t('chart.tableOptions')}
+                        </Button>
+                      </Dropdown>
+                    </Space>
+                  </div>
+                }
+                className='shadow-sm !mb-6'
+              >
+                <Table
+                  columns={generateColumns(benchmark.allTests)}
+                  dataSource={sortedModels}
+                  pagination={{
+                    defaultPageSize: pageSize,
+                    pageSize: pageSize,
+                    showSizeChanger: false,
+                    showTotal: (total) => t('chart.totalModels', { total }),
+                  }}
+                  scroll={{ x: 'max-content' }}
+                  size={tableSize}
+                  bordered
+                />
+              </Card>
+            );
+          })}
     </div>
   );
 };

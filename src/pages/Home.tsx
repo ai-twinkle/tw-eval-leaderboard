@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useTransition } from 'react';
 import {
   App,
   Button,
@@ -53,6 +53,7 @@ export const Home: React.FC = () => {
   // UI state
   const [scale0100, setScale0100] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>('dashboard');
+  const [, startViewTransition] = useTransition();
 
   // Mobile sidebar drawer state
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -375,7 +376,9 @@ export const Home: React.FC = () => {
             {/* View Mode Toggle - hidden on mobile */}
             <Radio.Group
               value={viewMode}
-              onChange={(e) => setViewMode(e.target.value)}
+              onChange={(e) =>
+                startViewTransition(() => setViewMode(e.target.value))
+              }
               buttonStyle='solid'
               size={'small'}
               className='hidden sm:inline-flex'
