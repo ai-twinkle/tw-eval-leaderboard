@@ -58,6 +58,22 @@ interface ModelRankingRow {
   [testName: string]: string | number | boolean | undefined;
 }
 
+interface OverviewRow {
+  key: string;
+  provider: string;
+  modelName: string;
+  modelId?: string;
+  displayName: string;
+  openSource: boolean;
+  isOfficial: boolean;
+  timestamp: string;
+  average: number;
+  evalMethod: string;
+  repeatRuns: string | number;
+  shuffleOptions: boolean | undefined;
+  [benchmarkName: string]: string | number | boolean | undefined;
+}
+
 function extractBenchmarkName(category: string): string {
   const parts = category.split('/');
   return parts[0] || category;
@@ -448,6 +464,48 @@ export const BenchmarkRankingTable: React.FC<RankingTableProps> = ({
     return benchmarks;
   }, [sources]);
 
+  const overviewData = useMemo(() => {
+    const data: OverviewRow[] = [];
+
+    sources.forEach((source) => {
+      const displayName = `${source.modelName}${source.variance !== 'default' ? ` (${source.variance})` : ''}`;
+
+      const rawDataConfig = (source.rawData as any)?.config?.evaluation || {};
+      const evalMethod = rawDataConfig.evaluation_method || '-';
+      const repeatRuns = rawDataConfig.repeat_runs || '-';
+      const shuffleOptions = rawDataConfig.shuffle_options;
+
+      const row: OverviewRow = {
+        key: source.id,
+        provider: source.provider,
+        modelName: source.modelName,
+        modelId: source.modelId,
+        displayName,
+        openSource: source.openSource,
+        isOfficial: source.isOfficial,
+        timestamp: source.timestamp,
+        average: 0,
+        evalMethod,
+        repeatRuns,
+        shuffleOptions,
+      };
+
+      benchmarkData.forEach((benchmark) => {
+        // Find this model in the benchmark based on the ID suffix
+        const bmModel = benchmark.models.find((m) =>
+          m.key.endsWith(`-${source.id}`),
+        );
+        if (bmModel) {
+          row[benchmark.benchmarkName] = bmModel.average;
+        }
+      });
+
+      data.push(row);
+    });
+
+    return data;
+  }, [sources, benchmarkData]);
+
   // Initialize visible columns when benchmark data changes
   useMemo(() => {
     const allColumns: Record<string, boolean> = {
@@ -788,6 +846,156 @@ export const BenchmarkRankingTable: React.FC<RankingTableProps> = ({
     );
   }
 
+  // --- Generate columns for Overview Table ---
+  const overviewColumns: ColumnsType<OverviewRow> = [
+    {
+      title: t('chart.model'),
+      dataIndex: 'displayName',
+      key: 'displayName',
+      width: 250,
+      fixed: 'left',
+      sorter: (a, b) => a.displayName.localeCompare(b.displayName),
+      render: (text: string, record: OverviewRow) => (
+        <div>
+          <Text strong style={{ fontSize: '13px' }}>
+            {record.modelId ? (
+              <a
+                href={`https://huggingface.co/${record.modelId}`}
+                target='_blank'
+                rel='noopener noreferrer'
+                onClick={(e) => e.stopPropagation()}
+              >
+                {text}
+              </a>
+            ) : (
+              text
+            )}
+          </Text>
+          <div>
+            {record.openSource && (
+              <Text
+                type='success'
+                style={{ fontSize: '11px', marginRight: '8px' }}
+              >
+                (OSS)
+              </Text>
+            )}
+            {record.isOfficial && (
+              <Text type='secondary' style={{ fontSize: '11px' }}>
+                ({t('controls.official')})
+              </Text>
+            )}
+          </div>
+        </div>
+      ),
+    },
+    {
+      title: t('chart.evalMethod'),
+      dataIndex: 'evalMethod',
+      key: 'evalMethod',
+      width: 100,
+      align: 'center',
+      render: (text: string) => (
+        <Text style={{ fontSize: '13px' }}>{text}</Text>
+      ),
+    },
+    ...benchmarkData.map((b) => ({
+      title: `${b.benchmarkName}${scale0100 ? '(%)' : ''}`,
+      dataIndex: b.benchmarkName,
+      key: b.benchmarkName,
+      width: 120,
+      align: 'center' as const,
+      sorter: (a: OverviewRow, b2: OverviewRow) => {
+        const aVal =
+          typeof a[b.benchmarkName] === 'number' ? a[b.benchmarkName] : 0;
+        const bVal =
+          typeof b2[b.benchmarkName] === 'number' ? b2[b.benchmarkName] : 0;
+        return (aVal as number) - (bVal as number);
+      },
+      defaultSortOrder: (b.benchmarkName.toLowerCase().includes('tmmlu')
+        ? 'descend'
+        : undefined) as 'descend' | undefined,
+      onCell: () => ({ style: { padding: 0 } }),
+      render: (value: number | undefined) => {
+        if (typeof value === 'number') {
+          const displayValue = scale0100 ? value * 100 : value;
+          const formatted = displayValue.toFixed(scale0100 ? 2 : 4);
+          const bgColor = getHeatmapColor(value, isDarkMode);
+          const textColor = getTextColor(value, isDarkMode);
+          const percentage = Math.min(value * 100, 100);
+
+          return (
+            <div
+              className='heatmap-cell'
+              style={{
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                overflow: 'hidden',
+              }}
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  left: 0,
+                  top: 0,
+                  bottom: 0,
+                  width: `${percentage}%`,
+                  backgroundColor: bgColor,
+                  transition: 'width 0.3s ease',
+                }}
+              />
+              <Text
+                style={{
+                  position: 'relative',
+                  zIndex: 1,
+                  color: textColor,
+                  fontWeight: 500,
+                  fontSize: '13px',
+                }}
+              >
+                {formatted}
+              </Text>
+            </div>
+          );
+        }
+        return (
+          <div style={{ padding: '8px 12px', textAlign: 'center' }}>
+            <Text type='secondary'>-</Text>
+          </div>
+        );
+      },
+    })),
+    {
+      title: t('chart.repeatRuns'),
+      dataIndex: 'repeatRuns',
+      key: 'repeatRuns',
+      width: 100,
+      align: 'center',
+      render: (text: string | number) => (
+        <Text style={{ fontSize: '13px' }}>{text}</Text>
+      ),
+    },
+    {
+      title: t('chart.shuffleOptions'),
+      dataIndex: 'shuffleOptions',
+      key: 'shuffleOptions',
+      width: 100,
+      align: 'center',
+      render: (val: boolean | undefined) => (
+        <Text style={{ fontSize: '13px' }}>
+          {val === true
+            ? t('chart.random')
+            : val === false
+              ? t('chart.fixed')
+              : '-'}
+        </Text>
+      ),
+    },
+  ];
+
   return (
     <div className='space-y-6'>
       {/* Search Bar */}
@@ -836,6 +1044,73 @@ export const BenchmarkRankingTable: React.FC<RankingTableProps> = ({
             ? ` ${t('chart.scoresPercentage')}`
             : ` ${t('chart.scoresDecimal')}`}
         </Text>
+      </Card>
+
+      {/* OVERVIEW TABLE */}
+      <Card
+        title={
+          <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2'>
+            <Text strong style={{ fontSize: 16 }}>
+              {t('chart.overviewTable')}
+            </Text>
+            <Space>
+              <Dropdown
+                menu={tableOptionsMenu}
+                trigger={['click']}
+                placement='bottomRight'
+              >
+                <Button size='small' icon={<SettingOutlined />}>
+                  {t('chart.tableOptions')}
+                </Button>
+              </Dropdown>
+            </Space>
+          </div>
+        }
+        className='shadow-sm !mb-6'
+      >
+        <Table
+          columns={overviewColumns}
+          dataSource={overviewData
+            .filter((row) => {
+              if (!searchQuery.trim()) return true;
+              const query = searchQuery.toLowerCase();
+              return (
+                row.displayName.toLowerCase().includes(query) ||
+                row.provider.toLowerCase().includes(query) ||
+                row.modelName.toLowerCase().includes(query)
+              );
+            })
+            .sort((a, b) => {
+              if (sortBy === 'modelName') {
+                return a.displayName.localeCompare(b.displayName);
+              }
+              // For overview table, sorting by average isn't perfectly defined since there is no 'average' column by default.
+              // Default sort by tmmluplus if available, otherwise fallback to modelName
+              const tmmluKey = benchmarkData.find((bm) =>
+                bm.benchmarkName.toLowerCase().includes('tmmlu'),
+              )?.benchmarkName;
+              if (tmmluKey) {
+                const aVal =
+                  typeof a[tmmluKey] === 'number' ? (a[tmmluKey] as number) : 0;
+                const bVal =
+                  typeof b[tmmluKey] === 'number' ? (b[tmmluKey] as number) : 0;
+                if (aVal !== bVal) {
+                  return bVal - aVal;
+                }
+              }
+
+              return a.displayName.localeCompare(b.displayName);
+            })}
+          pagination={{
+            defaultPageSize: pageSize,
+            pageSize: pageSize,
+            showSizeChanger: false,
+            showTotal: (total) => t('chart.totalModels', { total }),
+          }}
+          scroll={{ x: 'max-content' }}
+          size={tableSize}
+          bordered
+        />
       </Card>
 
       {benchmarkData.map((benchmark) => {

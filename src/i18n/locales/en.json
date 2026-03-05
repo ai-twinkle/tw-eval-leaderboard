@@ -115,7 +115,13 @@
     "searchModels": "Search by model name...",
     "searchColumns": "Search columns...",
     "noColumnsFound": "No columns found",
-    "modelsFound": "{{shown}} / {{total}}"
+    "modelsFound": "{{shown}} / {{total}}",
+    "evalMethod": "Eval Method",
+    "repeatRuns": "Repeat Runs",
+    "shuffleOptions": "Option Sorting",
+    "overviewTable": "Benchmark Overview",
+    "random": "Random",
+    "fixed": "Fixed"
   },
   "categories": {
     "computerScience": "Computer Science",

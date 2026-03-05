@@ -115,7 +115,13 @@
     "searchModels": "搜尋模型名稱...",
     "searchColumns": "搜尋欄位...",
     "noColumnsFound": "找不到欄位",
-    "modelsFound": "{{shown}} / {{total}}"
+    "modelsFound": "{{shown}} / {{total}}",
+    "evalMethod": "評測模式",
+    "repeatRuns": "測試次數",
+    "shuffleOptions": "選項排序",
+    "overviewTable": "基準測試總覽",
+    "random": "隨機",
+    "fixed": "固定"
   },
   "categories": {
     "computerScience": "電腦科學",
