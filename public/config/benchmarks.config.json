@@ -201,6 +201,17 @@
       "openSource": true,
       "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/llama-3.2-3B-f1-instruct-eval-logs-and-scores/tree/main/results/twinkle-ai__Llama-3.2-3B-F1-Instruct/default",
       "size": 3
+    },
+    {
+      "id": "gpt-oss-20b-mandarin-thinking-twinkle-eval-v1",
+      "label": "GPT-OSS 20B Mandarin Thinking — Twinkle Eval V1",
+      "provider": "FreeSEED AI",
+      "modelName": "gpt-oss-20b-mandarin-thinking",
+      "modelId": "FreeSEED-AI/gpt-oss-20b-mandarin-thinking",
+      "variance": "default",
+      "openSource": true,
+      "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/gpt-oss-20b-mandarin-thinking-eval-logs-and-scores/tree/main/results/FreeSEED-AI__gpt-oss-20b-mandarin-thinking/default",
+      "size": 20
     }
   ],
   "ui": {
