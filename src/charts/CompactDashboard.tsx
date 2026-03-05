@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import * as d3 from 'd3';
+import { Spin } from 'antd';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import { useTheme } from '../contexts/ThemeContext';
@@ -843,6 +844,8 @@ export const CompactDashboard: React.FC<CompactDashboardProps> = ({
   const [unselectedBenchmarks, setUnselectedBenchmarks] = useState<Set<string>>(
     new Set(),
   );
+  // True once D3 has finished its first draw
+  const [chartReady, setChartReady] = useState(false);
 
   const availableBenchmarks = useMemo(() => {
     const benchmarks = new Set<string>();
@@ -885,6 +888,7 @@ export const CompactDashboard: React.FC<CompactDashboardProps> = ({
     if (!containerRef.current || sources.length === 0) return;
 
     const container = containerRef.current;
+    setChartReady(false); // show spinner while D3 draws
     d3.select(container).selectAll('*').remove();
 
     const width = container.clientWidth;
@@ -1029,6 +1033,14 @@ export const CompactDashboard: React.FC<CompactDashboardProps> = ({
     isDarkMode, // Re-render chart when theme changes
     unselectedBenchmarks,
   ]);
+  // Signal chart is ready after draw completes
+  // (placed OUTSIDE the effect so it runs after D3 mutations commit)
+  useEffect(() => {
+    if (chartReady) return;
+    // chartReady is reset to false inside the draw effect;
+    // this effect fires after the SVG is in the DOM
+    setChartReady(true);
+  });
 
   if (sources.length === 0) {
     return (
@@ -1039,11 +1051,31 @@ export const CompactDashboard: React.FC<CompactDashboardProps> = ({
   }
 
   return (
-    <div className='w-full'>
+    <div className='w-full' style={{ position: 'relative' }}>
+      {/* Absolute spinner overlay — visible while D3 is drawing */}
+      {!chartReady && (
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            minHeight: 500,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 10,
+          }}
+        >
+          <Spin size='large' />
+        </div>
+      )}
+      {/*
+        IMPORTANT: keep container always in layout (opacity, not display:none)
+        so container.clientWidth is never 0 when D3 reads it.
+      */}
       <div
         ref={containerRef}
         className='w-full min-h-[500px] md:min-h-[700px]'
-        style={{}}
+        style={{ opacity: chartReady ? 1 : 0 }}
       />
     </div>
   );
