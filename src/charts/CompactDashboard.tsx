@@ -569,24 +569,28 @@ function drawRadarChart(
     });
 
     // -------- NEW DESKTOP BENCHMARK LEGEND --------
-    currentY += 20;
+    const benchLegendG = svg
+      .append('g')
+      .attr('transform', `translate(30, 100)`);
 
-    legendG
+    let benchY = 0;
+
+    benchLegendG
       .append('text')
       .attr('x', 0)
-      .attr('y', currentY)
+      .attr('y', benchY)
       .style('font-size', '13px')
       .style('font-weight', 'bold')
       .style('fill', getCssVar('--chart-text-primary'))
       .text(t('chart.legendBenchmarks', { defaultValue: 'Benchmarks' }));
 
-    currentY += 20;
+    benchY += 20;
 
     availableBenchmarks.forEach((bm) => {
       const isActive = activeBenchmarks.has(bm);
-      const bmItem = legendG
+      const bmItem = benchLegendG
         .append('g')
-        .attr('transform', `translate(10, ${currentY})`)
+        .attr('transform', `translate(10, ${benchY})`)
         .style('cursor', 'pointer')
         .style('opacity', isActive ? 1 : 0.4)
         .on('click', () => onBenchmarkToggle(bm))
@@ -638,11 +642,11 @@ function drawRadarChart(
           `${bm}\n${t('chart.clickToToggle', { defaultValue: 'Click to toggle' })}`,
         );
 
-      currentY += 20;
+      benchY += 20;
     });
 
     // Dynamically update SVG height AND viewBox to fit the desktop legend
-    const requiredHeight = 100 + currentY + 40;
+    const requiredHeight = 100 + Math.max(currentY, benchY) + 40;
     if (requiredHeight > height) {
       svg.attr('height', requiredHeight);
       svg.attr('viewBox', `0 0 ${width} ${requiredHeight}`);
