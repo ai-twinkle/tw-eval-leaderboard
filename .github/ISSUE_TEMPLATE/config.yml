@@ -1,9 +1,9 @@
 blank_issues_enabled: true
 contact_links:
-  - name: � API 模型評測 / API Model Evaluation
+  - name: 🔑 API 模型評測 / API Model Evaluation
     url: https://twinkleai.tw/discord
     about: 需要評測 API 模型（OpenAI、Anthropic 等）？請加入 Discord 聯繫工作人員協助（涉及 API key 管理）
-  - name: �📖 查看文檔 / Documentation
+  - name: 📖 查看文檔 / Documentation
     url: https://github.com/ai-twinkle/tw-eval-leaderboard/blob/main/README.md
     about: 查看專案文檔和使用說明
   - name: 💬 討論區 / Discussions
