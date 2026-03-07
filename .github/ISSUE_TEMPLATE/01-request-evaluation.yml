@@ -1,0 +1,117 @@
+name: 🚀 請求評測 / Request Evaluation
+description: 請求對新模型或新數據集進行評測 / Request evaluation for a new model or dataset
+title: "[評測請求] "
+labels: ["evaluation-request", "pending"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感謝您提交評測請求！請填寫以下資訊，我們會盡快處理。
+        Thank you for submitting an evaluation request! Please fill in the information below.
+        
+        **⚠️ 重要提示 / Important Notice:**
+        
+        - ✅ **開源模型評測**：請使用此表單提交 HuggingFace 上透過 vLLM 運行的開源模型
+        - 🔑 **API 模型評測**：如果您需要評測 API 服務模型（如 OpenAI、Anthropic、Google 等），因涉及 API key 管理，請前往 [Discord 社群](https://twinkleai.tw/discord) 聯繫工作人員協助
+        
+        ---
+        
+        - ✅ **Open Source Models**: Use this form to submit HuggingFace models running via vLLM
+        - 🔑 **API Models**: For API-based models (OpenAI, Anthropic, Google, etc.), please contact our team via [Discord](https://twinkleai.tw/discord) for API key management
+
+  - type: input
+    id: model-id
+    attributes:
+      label: HuggingFace 模型 ID / HuggingFace Model ID
+      description: 請提供完整的 HuggingFace 模型 ID（格式：組織名稱/模型名稱）
+      placeholder: 例如：twinkle-ai/gemma-3-4B-T1-it 或 meta-llama/Llama-3.1-8B-Instruct
+    validations:
+      required: true
+
+  - type: input
+    id: model-display-name
+    attributes:
+      label: 顯示名稱（選填）/ Display Name (Optional)
+      description: 在排行榜上顯示的模型名稱（如不填寫將使用 Model ID）
+      placeholder: 例如：Llama 3 70B Instruct
+
+  - type: textarea
+    id: datasets
+    attributes:
+      label: 評測數據集 / Evaluation Datasets
+      description: 請列出要使用的評測數據集路徑或名稱
+      placeholder: |
+        - ikala__tmmluplus (台灣大規模多任務語言理解評測)
+        - cais__mmlu (多任務語言理解評測)
+        - lianghsun__tw-legal-benchmark-v1 (台灣法律基準測試)
+      value: |
+        - ikala__tmmluplus
+        - cais__mmlu
+        - lianghsun__tw-legal-benchmark-v1
+    validations:
+      required: true
+
+  - type: dropdown
+    id: evaluation-method
+    attributes:
+      label: 評測方法 / Evaluation Method
+      description: 選擇答案提取方法
+      options:
+        - box (使用 \box{選項} 格式)
+        - letter (直接輸出字母)
+        - custom (自訂方法，請在備註中說明)
+      default: 0
+    validations:
+      required: true
+
+  - type: textarea
+    id: custom-prompt
+    attributes:
+      label: 自訂 System Prompt（選填）/ Custom System Prompt (Optional)
+      description: 如果您認為模型需要特殊的 system prompt，請在此提供
+      placeholder: |
+        zh: |
+          您的中文提示詞...
+        en: |
+          Your English prompt...
+      value: |
+        zh: |
+          使用者將提供一個題目，並附上選項 A、B、C、D
+          請仔細閱讀題目要求，根據題意選出最符合的選項，並將選項以以下格式輸出：
+          \box{選項}
+          請確保僅將選項包含在 { } 中，否則將不計算為有效答案。
+          務必精確遵循輸出格式，避免任何多餘內容或錯誤格式。
+        en: |
+          The user will provide a question along with options A, B, C, and D.
+          Please read the question carefully and select the option that best fits the requirements.
+          Output the selected option in the following format:
+          \box{Option}
+          Make sure to include only the option within the curly braces; otherwise, it will not be considered a valid answer.
+          Strictly follow the output format and avoid any extra content or incorrect formatting.
+
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: 額外資訊 / Additional Information
+      description: 其他需要說明的資訊（例如：模型特性、預期表現、已知問題等）
+      placeholder: 請提供任何有助於評測的額外資訊
+
+  - type: input
+    id: contact
+    attributes:
+      label: 聯絡方式 / Contact Information
+      description: 如何聯絡您（選填）
+      placeholder: 例如：email@example.com 或 @github-username
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: 確認事項 / Confirmation
+      description: 請確認以下事項
+      options:
+        - label: 我確認此模型為 HuggingFace 上可用的開源模型 / I confirm this is an open-source model available on HuggingFace
+          required: true
+        - label: 我確認此模型可透過 vLLM 正常運行 / I confirm this model can run properly with vLLM
+          required: true
+        - label: 我了解評測可能需要一些時間完成 / I understand the evaluation may take some time to complete
+          required: true

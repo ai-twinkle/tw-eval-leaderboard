@@ -1,0 +1,158 @@
+name: 🔧 修正評測 / Fix Evaluation
+description: 回報評測結果異常或請求修正評測配置 / Report evaluation issues or request evaluation configuration fixes
+title: "[評測修正] "
+labels: ["evaluation-fix", "bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感謝您回報評測問題！請提供詳細資訊以協助我們修正。
+        Thank you for reporting an evaluation issue! Please provide detailed information to help us fix it.
+        
+        **ℹ️ 注意 / Notice:**
+        - 此表單適用於 HuggingFace 開源模型的評測問題
+        - 如需回報 API 模型評測問題，請前往 [Discord](https://twinkleai.tw/discord) 聯繫工作人員
+        
+        ---
+        
+        - This form is for HuggingFace open-source model evaluation issues
+        - For API model issues, please contact us via [Discord](https://twinkleai.tw/discord)
+
+  - type: input
+    id: affected-model
+    attributes:
+      label: 受影響的模型 / Affected Model
+      description: 請提供 HuggingFace 模型 ID 或顯示名稱
+      placeholder: 例如：meta-llama/Llama-3-70B-Instruct 或 Llama 3 70B Instruct
+    validations:
+      required: true
+
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: 問題類型 / Issue Type
+      description: 請選擇最符合的問題類型
+      options:
+        - 評測分數異常 / Abnormal evaluation scores
+        - System Prompt 導致表現下降 / System prompt causes performance degradation
+        - 答案提取失敗 / Answer extraction failure
+        - 數據集配置錯誤 / Dataset configuration error
+        - 重複性問題（多次執行結果差異大）/ Reproducibility issue
+        - 其他 / Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem-description
+    attributes:
+      label: 問題描述 / Problem Description
+      description: 詳細描述遇到的問題
+      placeholder: |
+        請說明：
+        1. 觀察到什麼異常現象？
+        2. 預期應該是什麼結果？
+        3. 實際得到什麼結果？
+    validations:
+      required: true
+
+  - type: textarea
+    id: affected-datasets
+    attributes:
+      label: 受影響的數據集 / Affected Datasets
+      description: 哪些數據集出現問題？
+      placeholder: |
+        - ikala__tmmluplus
+        - cais__mmlu
+        - lianghsun__tw-legal-benchmark-v1
+
+  - type: textarea
+    id: current-config
+    attributes:
+      label: 當前評測配置 / Current Evaluation Configuration
+      description: 請貼上當前使用的評測配置（如果知道的話）
+      placeholder: |
+        evaluation_method: "box"
+        system_prompt:
+          zh: |
+            使用者將提供一個題目...
+        repeat_runs: 3
+        shuffle_options: true
+      render: yaml
+
+  - type: textarea
+    id: proposed-fix
+    attributes:
+      label: 建議修正方案 / Proposed Fix
+      description: 如果您有修正建議，請在此說明
+      placeholder: |
+        例如：
+        - 調整 system prompt 的格式要求
+        - 修改答案提取正則表達式
+        - 更改評測方法從 "box" 改為 "letter"
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 證據與範例 / Evidence & Examples
+      description: 提供具體的錯誤範例、日誌或截圖
+      placeholder: |
+        請提供：
+        - 模型的實際輸出範例
+        - 錯誤訊息或日誌
+        - 評測分數比較（修正前 vs 預期）
+        - 相關截圖
+
+  - type: textarea
+    id: model-specific-notes
+    attributes:
+      label: 模型特性說明 / Model-Specific Notes
+      description: 此模型是否有特殊的輸出格式或行為模式？
+      placeholder: |
+        例如：
+        - 此模型傾向於在答案前加上解釋
+        - 此模型對格式要求特別敏感
+        - 此模型在中文提示詞下表現較差
+
+  - type: dropdown
+    id: urgency
+    attributes:
+      label: 優先級 / Priority
+      description: 此問題的嚴重程度
+      options:
+        - 高 / High（嚴重影響評測結果）
+        - 中 / Medium（部分影響評測準確性）
+        - 低 / Low（小問題或改進建議）
+      default: 1
+    validations:
+      required: true
+
+  - type: textarea
+    id: comparison
+    attributes:
+      label: 與其他模型的比較 / Comparison with Other Models
+      description: 其他模型在相同數據集上是否有類似問題？
+      placeholder: |
+        例如：
+        - GPT-4 在相同配置下表現正常
+        - Claude 系列模型也有類似問題
+        - 只有這個特定模型受影響
+
+  - type: input
+    id: contact
+    attributes:
+      label: 聯絡方式 / Contact Information
+      description: 如何聯絡您以獲取更多資訊（選填）
+      placeholder: 例如：email@example.com 或 @github-username
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: 確認事項 / Checklist
+      description: 提交前請確認
+      options:
+        - label: 我已經檢查過現有的 issues，這不是重複的問題 / I have checked existing issues and this is not a duplicate
+          required: true
+        - label: 我已提供足夠的資訊來重現此問題 / I have provided sufficient information to reproduce this issue
+          required: true
+        - label: （如果適用）我已嘗試調整配置但問題仍存在 / I have tried adjusting configurations but the issue persists (if applicable)
+          required: false
