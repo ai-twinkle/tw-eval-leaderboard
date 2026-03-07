@@ -278,6 +278,17 @@
       "openSource": true,
       "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/Llama-3.2-3B-Instruct-eval-logs-and-scores/tree/main/results/meta-llama__Llama-3.2-3B-Instruct/default",
       "size": 3
+    },
+    {
+      "id": "Llama-3.3-70B-Instruct-twinkle-eval-v1",
+      "label": "Llama 3.3 70B Instruct — Twinkle Eval V1",
+      "provider": "Meta",
+      "modelName": "Llama-3.3-70B-Instruct",
+      "modelId": "meta-llama/Llama-3.3-70B-Instruct",
+      "variance": "default",
+      "openSource": true,
+      "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/Llama-3.3-70B-Instruct-eval-logs-and-scores/tree/main/results/meta-llama__Llama-3.3-70B-Instruct/default",
+      "size": 70
     }
   ],
   "ui": {
