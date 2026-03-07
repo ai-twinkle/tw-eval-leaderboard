@@ -256,6 +256,17 @@
       "openSource": true,
       "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/Llama-Breeze2-8B-Instruct-eval-logs-and-scores/tree/main/results/MediaTek-Research__Llama-Breeze2-8B-Instruct/default",
       "size": 8
+    },
+    {
+      "id": "Llama-3.1-8B-Instruct-twinkle-eval-v1",
+      "label": "Llama 3.1 8B Instruct — Twinkle Eval V1",
+      "provider": "Meta",
+      "modelName": "Llama-3.1-8B-Instruct",
+      "modelId": "meta-llama/Llama-3.1-8B-Instruct",
+      "variance": "default",
+      "openSource": true,
+      "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/Llama-3.1-8B-Instruct-eval-logs-and-scores/tree/main/results/meta-llama__Llama-3.1-8B-Instruct/default",
+      "size": 8
     }
   ],
   "ui": {
