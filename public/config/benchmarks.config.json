@@ -245,6 +245,17 @@
       "openSource": true,
       "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/Llama-3-Taiwan-70B-Instruct-eval-logs-and-scores/tree/main/results/yentinglin__Llama-3-Taiwan-70B-Instruct/default",
       "size": 70
+    },
+    {
+      "id": "Llama-Breeze2-8B-Instruct-twinkle-eval-v1",
+      "label": "Llama Breeze2 8B Instruct — Twinkle Eval V1",
+      "provider": "MediaTek Research",
+      "modelName": "Llama-Breeze2-8B-Instruct",
+      "modelId": "MediaTek-Research/Llama-Breeze2-8B-Instruct",
+      "variance": "default",
+      "openSource": true,
+      "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/Llama-Breeze2-8B-Instruct-eval-logs-and-scores/tree/main/results/MediaTek-Research__Llama-Breeze2-8B-Instruct/default",
+      "size": 8
     }
   ],
   "ui": {
