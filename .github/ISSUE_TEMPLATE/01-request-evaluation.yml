@@ -58,8 +58,7 @@ body:
       description: 選擇答案提取方法
       options:
         - box (使用 \box{選項} 格式)
-        - letter (直接輸出字母)
-        - custom (自訂方法，請在備註中說明)
+        - pattern (使用正則表達式匹配選項)
       default: 0
     validations:
       required: true
