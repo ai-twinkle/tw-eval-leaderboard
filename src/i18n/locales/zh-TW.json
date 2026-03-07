@@ -13,7 +13,8 @@
     "viewOnGithub": "在 GitHub 上查看",
     "poweredBy": "由",
     "builtFor": "為卓越評測打造",
-    "runOwnResult": "執行您自己的評測"
+    "runOwnResult": "執行您自己的評測",
+    "reportIssue": "回報問題 / 申請評測"
   },
   "controls": {
     "title": "控制面板",

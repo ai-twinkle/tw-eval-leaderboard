@@ -13,7 +13,8 @@
     "viewOnGithub": "View on GitHub",
     "poweredBy": "Powered by",
     "builtFor": "Built for benchmark excellence",
-    "runOwnResult": "Run your own result"
+    "runOwnResult": "Run your own result",
+    "reportIssue": "Report Issue / Request Eval"
   },
   "controls": {
     "title": "Controls",

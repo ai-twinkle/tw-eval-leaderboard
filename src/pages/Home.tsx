@@ -15,6 +15,7 @@ import {
   TableOutlined,
   GithubOutlined,
   StarFilled,
+  BugOutlined,
   FileAddOutlined,
   MenuOutlined,
   CloseOutlined,
@@ -529,6 +530,15 @@ export const Home: React.FC = () => {
             <StarFilled
               style={{ color: '#FFD400', marginLeft: '4px', fontSize: '12px' }}
             />
+            <span className='mx-2'>·</span>
+            <a
+              href='https://github.com/ai-twinkle/tw-eval-leaderboard/issues/new/choose'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              <BugOutlined style={{ marginRight: '4px', fontSize: '12px' }} />
+              {t('app.reportIssue')}
+            </a>
           </div>
         </div>
       </div>
