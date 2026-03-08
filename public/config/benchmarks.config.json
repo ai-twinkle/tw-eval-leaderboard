@@ -289,6 +289,17 @@
       "openSource": true,
       "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/Llama-3.3-70B-Instruct-eval-logs-and-scores/tree/main/results/meta-llama__Llama-3.3-70B-Instruct/default",
       "size": 70
+    },
+    {
+      "id": "Gemma-3-12b-it-twinkle-eval-v1",
+      "label": "Gemma 3 12B It — Twinkle Eval V1",
+      "provider": "Google",
+      "modelName": "Gemma-3-12b-it",
+      "modelId": "google/gemma-3-12b-it",
+      "variance": "default",
+      "openSource": true,
+      "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/Gemma-3-12b-it-eval-logs-and-scores/tree/main/results/google__gemma-3-12b-it/default",
+      "size": 12
     }
   ],
   "ui": {
