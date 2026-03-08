@@ -1,0 +1,130 @@
+name: ➕ 新增台灣 Benchmark / Add Taiwan Benchmark
+description: 請求新增台灣相關的 benchmark 數據集 / Request to add Taiwan-related benchmark datasets
+title: "[新增 Benchmark] "
+labels: ["benchmark-add", "enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感謝您建議新增台灣 benchmark！請提供詳細資訊以協助我們評估和整合。
+        Thank you for suggesting to add a Taiwan benchmark! Please provide detailed information to help us evaluate and integrate it.
+        
+        **ℹ️ 注意 / Notice:**
+        - 此表單適用於請求新增台灣相關的 benchmark 數據集
+        - 數據集必須在 HuggingFace 上公開可用
+        
+        ---
+        
+        - This form is for requesting to add Taiwan-related benchmark datasets
+        - The dataset must be publicly available on HuggingFace
+
+  - type: input
+    id: benchmark-name
+    attributes:
+      label: Benchmark 名稱 / Benchmark Name
+      description: 請提供 benchmark 的完整名稱
+      placeholder: 例如：Taiwan Legal Benchmark v1 或 台法律基準測試
+    validations:
+      required: true
+
+  - type: input
+    id: huggingface-id
+    attributes:
+      label: HuggingFace Dataset ID
+      description: 請提供 HuggingFace 上的數據集 ID（格式：owner/dataset-name）
+      placeholder: 例如：lianghsun/tw-legal-benchmark-v1 或 ai-twinkle/taiwan-benchmark
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Benchmark 描述 / Benchmark Description
+      description: 詳細描述這個 benchmark 的內容、目的和評測方式
+      placeholder: |
+        請說明：
+        1. 此 benchmark 測試什麼能力？
+        2. 數據集包含哪些類型的問題？
+        3. 評測指標是什麼？
+        4. 預期的使用場景？
+    validations:
+      required: true
+
+  - type: textarea
+    id: dataset-details
+    attributes:
+      label: 數據集詳細資訊 / Dataset Details
+      description: 提供數據集的統計資訊和格式說明
+      placeholder: |
+        請提供：
+        - 數據集大小（樣本數量）
+        - 數據格式（JSONL、JSON 等）
+        - 語言（中文、英文等）
+        - 難度分佈
+        - 任何特殊的處理需求
+
+  - type: textarea
+    id: evaluation-method
+    attributes:
+      label: 建議的評測方法 / Suggested Evaluation Method
+      description: 如果您有建議的評測配置，請在此說明
+      placeholder: |
+        例如：
+        - evaluation_method: "box" 或 "letter"
+        - system_prompt 建議
+        - 答案提取方式
+        - 重複執行次數
+
+  - type: textarea
+    id: rationale
+    attributes:
+      label: 新增理由 / Rationale for Addition
+      description: 為什麼這個 benchmark 對台灣 AI 生態重要？
+      placeholder: |
+        請說明：
+        1. 當前 benchmark 的不足之處
+        2. 此 benchmark 如何補充現有評測
+        3. 台灣用戶或開發者的需求
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 優先級 / Priority
+      description: 此 benchmark 新增的緊急程度
+      options:
+        - 高 / High（台灣 AI 生態急需）
+        - 中 / Medium（有助於台灣 AI 發展）
+        - 低 / Low（nice-to-have 功能）
+      default: 1
+    validations:
+      required: true
+
+  - type: textarea
+    id: references
+    attributes:
+      label: 參考資料 / References
+      description: 提供相關論文、網站或其他參考資料
+      placeholder: |
+        - 論文連結
+        - 相關研究
+        - 數據集來源說明
+
+  - type: input
+    id: contact
+    attributes:
+      label: 聯絡方式 / Contact Information
+      description: 如何聯絡您以獲取更多資訊（選填）
+      placeholder: 例如：email@example.com 或 @github-username
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: 確認事項 / Checklist
+      description: 提交前請確認
+      options:
+        - label: 我已經檢查過現有的 issues，這不是重複的請求 / I have checked existing issues and this is not a duplicate request
+          required: true
+        - label: 數據集已在 HuggingFace 上公開可用 / The dataset is publicly available on HuggingFace
+          required: true
+        - label: 我已確認數據集內容符合台灣相關主題 / I have confirmed the dataset content is relevant to Taiwan
+          required: true
