@@ -319,7 +319,7 @@ function drawRadarChart(
       .enter()
       .append('circle')
       .attr('class', `radar-circle radar-circle-${idx}`)
-      .attr('r', isHighlighted ? 4.5 : 3)
+      .attr('r', isHighlighted ? 3 : 1)
       .attr(
         'cx',
         (d, i) => rScale(d.value) * Math.cos(angleSlice * i - Math.PI / 2),
@@ -335,7 +335,7 @@ function drawRadarChart(
       .style('cursor', 'pointer')
       .on('mouseenter', function (event, d) {
         // Enlarge circle
-        d3.select(this).attr('r', 7).style('stroke-width', 3);
+        d3.select(this).attr('r', 4.5).style('stroke-width', 3);
 
         // Highlight the entire radar path temporarily
         g.select(`.radar-area-${idx}`)
@@ -386,7 +386,7 @@ function drawRadarChart(
       .on('mouseleave', function () {
         // Reset circle size
         d3.select(this)
-          .attr('r', isHighlighted ? 4.5 : 3)
+          .attr('r', isHighlighted ? 3 : 1)
           .style('stroke-width', 2);
 
         // Reset radar path
