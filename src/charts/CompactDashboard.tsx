@@ -75,11 +75,13 @@ function drawRadarChart(
     bottom: isMobile ? 40 : 80,
     left: isMobile ? 30 : 220,
   };
-  const radius =
+  const desktopScaleFactor = 0.9;
+  const baseRadius =
     Math.min(
       width - margin.left - margin.right,
       isMobile ? 10000 : height - margin.top - margin.bottom,
     ) / 2;
+  const radius = isMobile ? baseRadius : baseRadius * desktopScaleFactor;
   const centerX = width / 2;
   // On mobile, align to top (margin.top + radius)
   const centerY = isMobile ? margin.top + radius : height / 2 + 20;
@@ -438,6 +440,8 @@ function drawRadarChart(
   // Legend (clickable) - Grouped by provider
   // Only show legend on larger screens
   if (!isMobile) {
+    const desktopLegendMaxYScale = 0.9;
+
     const legendG = svg
       .append('g')
       .attr('transform', `translate(${width - 200}, 100)`);
@@ -474,7 +478,10 @@ function drawRadarChart(
 
     // Create a scrollable container via foreignObject
     const foreignObjectWidth = 240;
-    const foreignObjectHeight = Math.max(200, height - 160);
+    const foreignObjectHeight = Math.max(
+      200,
+      (height - 160) * desktopLegendMaxYScale,
+    );
 
     const fo = legendG
       .append('foreignObject')
