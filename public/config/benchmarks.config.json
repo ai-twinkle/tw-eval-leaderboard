@@ -311,6 +311,17 @@
       "openSource": true,
       "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/Devstral-Small-2505-eval-logs-and-scores/tree/main/results/mistralai__Devstral-Small-2505/default",
       "size": 24
+    },
+    {
+      "id": "NVIDIA-Nemotron-3-Super-120B-A12B-FP8-twinkle-eval-v1",
+      "label": "NVIDIA Nemotron 3 Super 120B A12B FP8 — Twinkle Eval V1",
+      "provider": "NVIDIA",
+      "modelName": "NVIDIA-Nemotron-3-Super-120B-A12B-FP8",
+      "modelId": "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-FP8",
+      "variance": "default",
+      "openSource": true,
+      "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/NVIDIA-Nemotron-3-Super-120B-A12B-FP8-eval-logs-and-scores/tree/main/results/nvidia__NVIDIA-Nemotron-3-Super-120B-A12B-FP8/default",
+      "size": 120
     }
   ],
   "ui": {
