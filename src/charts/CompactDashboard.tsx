@@ -489,13 +489,28 @@ function drawRadarChart(
       .style('width', '100%')
       .style('height', '100%')
       .style('overflow-y', 'auto')
+      .style('overscroll-behavior', 'contain')
       .style('pointer-events', 'auto');
 
     const scrollContainerNode = scrollContainer.node() as HTMLDivElement | null;
-    if (scrollContainerNode && legendScrollTop > 0) {
-      requestAnimationFrame(() => {
-        scrollContainerNode.scrollTop = legendScrollTop;
-      });
+    if (scrollContainerNode) {
+      if (legendScrollTop > 0) {
+        requestAnimationFrame(() => {
+          scrollContainerNode.scrollTop = legendScrollTop;
+        });
+      }
+
+      scrollContainerNode.addEventListener(
+        'wheel',
+        (event: WheelEvent) => {
+          event.preventDefault();
+          event.stopPropagation();
+
+          const deltaMultiplier = event.deltaMode === 1 ? 16 : 1;
+          scrollContainerNode.scrollTop += event.deltaY * deltaMultiplier;
+        },
+        { passive: false },
+      );
     }
 
     let innerHeight = 10;
