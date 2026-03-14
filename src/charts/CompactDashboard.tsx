@@ -54,6 +54,7 @@ function drawRadarChart(
   onCategoryClick: (category: string) => void,
   onModelClick: (model: string) => void,
   onBenchmarkToggle: (benchmark: string) => void,
+  legendScrollTop: number,
   t: TFunction,
   isDarkMode: boolean,
 ) {
@@ -484,10 +485,18 @@ function drawRadarChart(
 
     const scrollContainer = fo
       .append('xhtml:div')
+      .attr('class', 'radar-legend-scroll')
       .style('width', '100%')
       .style('height', '100%')
       .style('overflow-y', 'auto')
       .style('pointer-events', 'auto');
+
+    const scrollContainerNode = scrollContainer.node() as HTMLDivElement | null;
+    if (scrollContainerNode && legendScrollTop > 0) {
+      requestAnimationFrame(() => {
+        scrollContainerNode.scrollTop = legendScrollTop;
+      });
+    }
 
     let innerHeight = 10;
     Object.entries(groupedByProvider).forEach(([, items]) => {
@@ -898,6 +907,7 @@ export const CompactDashboard: React.FC<CompactDashboardProps> = ({
   const [unselectedBenchmarks, setUnselectedBenchmarks] = useState<Set<string>>(
     new Set(),
   );
+  const legendScrollTopRef = useRef(0);
   // True once D3 has finished its first draw
   const [chartReady, setChartReady] = useState(false);
 
@@ -943,6 +953,14 @@ export const CompactDashboard: React.FC<CompactDashboardProps> = ({
 
     const container = containerRef.current;
     setChartReady(false); // show spinner while D3 draws
+
+    const previousLegendScroll = container.querySelector<HTMLDivElement>(
+      '.radar-legend-scroll',
+    );
+    if (previousLegendScroll) {
+      legendScrollTopRef.current = previousLegendScroll.scrollTop;
+    }
+
     d3.select(container).selectAll('*').remove();
 
     const width = container.clientWidth;
@@ -1069,6 +1087,7 @@ export const CompactDashboard: React.FC<CompactDashboardProps> = ({
         }
       },
       (benchmark) => toggleBenchmark(benchmark),
+      legendScrollTopRef.current,
       t,
       isDarkMode,
     );
@@ -1094,7 +1113,7 @@ export const CompactDashboard: React.FC<CompactDashboardProps> = ({
     // chartReady is reset to false inside the draw effect;
     // this effect fires after the SVG is in the DOM
     setChartReady(true);
-  });
+  }, [chartReady]);
 
   if (sources.length === 0) {
     return (
