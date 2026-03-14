@@ -97,6 +97,7 @@
     "legendClickToHighlight": "（點擊以突出顯示）",
     "legendBenchmarks": "基準測試：",
     "noDataAvailable": "無可用資料。請載入基準測試或上傳檔案。",
+    "scrollForMoreModels": "↓ 向下捲動查看更多模型",
     "clickToToggleHighlight": "點擊以切換突出顯示",
     "clickToFocus": "點擊以聚焦",
     "min": "最小值",

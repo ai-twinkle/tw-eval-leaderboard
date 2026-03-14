@@ -471,14 +471,45 @@ function drawRadarChart(
       {} as Record<string, Array<{ source: DataSource; index: number }>>,
     );
 
+    // Create a scrollable container via foreignObject
+    const foreignObjectWidth = 240;
+    const foreignObjectHeight = Math.max(200, height - 160);
+
+    const fo = legendG
+      .append('foreignObject')
+      .attr('x', -10)
+      .attr('y', 10)
+      .attr('width', foreignObjectWidth)
+      .attr('height', foreignObjectHeight);
+
+    const scrollContainer = fo
+      .append('xhtml:div')
+      .style('width', '100%')
+      .style('height', '100%')
+      .style('overflow-y', 'auto')
+      .style('pointer-events', 'auto');
+
+    let innerHeight = 10;
+    Object.entries(groupedByProvider).forEach(([, items]) => {
+      innerHeight += 20;
+      innerHeight += items.length * 25;
+      innerHeight += 10;
+    });
+
+    const innerSvg = scrollContainer
+      .append('svg')
+      .attr('width', foreignObjectWidth - 20)
+      .attr('height', Math.max(innerHeight, foreignObjectHeight))
+      .style('display', 'block');
+
     let currentY = 10;
 
     // Render each provider group
     Object.entries(groupedByProvider).forEach(([provider, items]) => {
       // Provider header
-      legendG
+      innerSvg
         .append('text')
-        .attr('x', 0)
+        .attr('x', 10)
         .attr('y', currentY)
         .style('font-size', '12px')
         .style('font-weight', 'bold')
@@ -495,9 +526,9 @@ function drawRadarChart(
           !highlightedModel || highlightedModel === sourceId;
         const isSelected = highlightedModel === sourceId;
 
-        const legendItem = legendG
+        const legendItem = innerSvg
           .append('g')
-          .attr('transform', `translate(10, ${currentY})`)
+          .attr('transform', `translate(20, ${currentY})`)
           .attr('class', 'legend-item')
           .style('cursor', 'pointer')
           .style('opacity', isHighlighted ? 1 : 0.4)
@@ -569,7 +600,27 @@ function drawRadarChart(
       currentY += 10; // Extra spacing between provider groups
     });
 
-    // -------- NEW DESKTOP BENCHMARK LEGEND --------
+    if (innerHeight > foreignObjectHeight) {
+      // Add visual indicator that the legend is long
+      const scrollIndicator = legendG
+        .append('g')
+        .attr('transform', `translate(0, ${foreignObjectHeight + 20})`);
+
+      scrollIndicator
+        .append('text')
+        .attr('x', 0)
+        .attr('y', 0)
+        .style('font-size', '11px')
+        .style('font-style', 'italic')
+        .style('fill', getCssVar('--color-text-muted'))
+        .text(
+          t('chart.scrollForMoreModels', {
+            defaultValue: '↓ Scroll to see more models',
+          }),
+        );
+    }
+
+    // Desktop benchmark legend
     const benchLegendG = svg
       .append('g')
       .attr('transform', `translate(30, 100)`);
@@ -646,8 +697,11 @@ function drawRadarChart(
       benchY += 20;
     });
 
-    // Dynamically update SVG height AND viewBox to fit the desktop legend
-    const requiredHeight = 100 + Math.max(currentY, benchY) + 40;
+    const legendTotalHeight =
+      innerHeight > foreignObjectHeight
+        ? foreignObjectHeight + 35
+        : foreignObjectHeight;
+    const requiredHeight = 100 + Math.max(legendTotalHeight, benchY) + 40;
     if (requiredHeight > height) {
       svg.attr('height', requiredHeight);
       svg.attr('viewBox', `0 0 ${width} ${requiredHeight}`);

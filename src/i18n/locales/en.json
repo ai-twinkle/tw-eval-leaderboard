@@ -97,6 +97,7 @@
     "legendClickToHighlight": "(click to highlight)",
     "legendBenchmarks": "Benchmarks:",
     "noDataAvailable": "No data available. Please load a benchmark or upload files.",
+    "scrollForMoreModels": "↓ Scroll to see more models",
     "clickToToggleHighlight": "Click to toggle highlight",
     "clickToFocus": "Click to focus",
     "min": "Min",
