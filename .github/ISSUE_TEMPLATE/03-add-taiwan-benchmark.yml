@@ -1,20 +1,20 @@
 name: ➕ 新增台灣 Benchmark / Add Taiwan Benchmark
 description: 請求新增台灣相關的 benchmark 數據集 / Request to add Taiwan-related benchmark datasets
-title: "[新增 Benchmark] "
-labels: ["benchmark-add", "enhancement"]
+title: '[新增 Benchmark] '
+labels: ['benchmark-add', 'enhancement']
 body:
   - type: markdown
     attributes:
       value: |
         感謝您建議新增台灣 benchmark！請提供詳細資訊以協助我們評估和整合。
         Thank you for suggesting to add a Taiwan benchmark! Please provide detailed information to help us evaluate and integrate it.
-        
+
         **ℹ️ 注意 / Notice:**
         - 此表單適用於請求新增台灣相關的 benchmark 數據集
         - 數據集必須在 HuggingFace 上公開可用
-        
+
         ---
-        
+
         - This form is for requesting to add Taiwan-related benchmark datasets
         - The dataset must be publicly available on HuggingFace
 

@@ -39,15 +39,17 @@ interface ControlsPanelProps {
 }
 
 /**
- * Intermediate mark values (B params) shown between 0 and max.
- * Kept sparse so labels never crowd.
+ * Dense milestone list for the slider's selectable steps.
+ * Some of these steps intentionally remain unlabeled to avoid crowding.
  */
-const SPARSE_MARKS = [7, 30, 100];
+const ALL_MILESTONES = [
+  3, 4, 7, 13, 24, 32, 64, 70, 128, 200, 400, 700, 1000, 2000,
+];
 
 /**
- * Full milestone list used only to snap max up to a clean boundary.
+ * Visible text labels kept sparse so the slider stays readable.
  */
-const ALL_MILESTONES = [3, 7, 13, 30, 70, 100, 200, 400, 700, 1000, 2000];
+const LABELED_MILESTONES = [7, 32, 128];
 
 function parseSize(size: number | string): number {
   const n = typeof size === 'string' ? parseFloat(size) : size;
@@ -56,6 +58,25 @@ function parseSize(size: number | string): number {
 
 function formatSizeB(n: number): string {
   return n === 0 ? '0' : `${n}B`;
+}
+
+function buildSliderMarks(values: number[]): Record<number, string> {
+  const marks: Record<number, string> = {
+    0: formatSizeB(values[0] ?? 0),
+  };
+
+  values.forEach((value, index) => {
+    if (index === 0 || index === values.length - 1) {
+      marks[index] = formatSizeB(value);
+      return;
+    }
+
+    if (LABELED_MILESTONES.includes(value)) {
+      marks[index] = formatSizeB(value);
+    }
+  });
+
+  return marks;
 }
 
 export const ControlsPanel: React.FC<ControlsPanelProps> = ({
@@ -99,23 +120,17 @@ export const ControlsPanel: React.FC<ControlsPanelProps> = ({
     }
     if (max < rawMax) max = Math.ceil(rawMax / 100) * 100;
 
-    // Build the ordered array of actual B values: [0, ...sparse, max]
+    // Build the ordered array of actual B values: [0, ...milestones, max]
     const values: number[] = [0];
-    for (const m of SPARSE_MARKS) {
+    for (const m of ALL_MILESTONES) {
       if (m < max) values.push(m);
     }
     values.push(max);
 
-    // antd marks: index → label string
-    const marks: Record<number, string> = {};
-    values.forEach((v, i) => {
-      marks[i] = formatSizeB(v);
-    });
-
     return {
       markValues: values,
       indexMax: values.length - 1,
-      antdMarks: marks,
+      antdMarks: buildSliderMarks(values),
     };
   }, [sources]);
 

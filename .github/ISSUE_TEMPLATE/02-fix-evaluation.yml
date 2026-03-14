@@ -1,20 +1,20 @@
 name: 🔧 修正評測 / Fix Evaluation
 description: 回報評測結果異常或請求修正評測配置 / Report evaluation issues or request evaluation configuration fixes
-title: "[評測修正] "
-labels: ["evaluation-fix", "bug"]
+title: '[評測修正] '
+labels: ['evaluation-fix', 'bug']
 body:
   - type: markdown
     attributes:
       value: |
         感謝您回報評測問題！請提供詳細資訊以協助我們修正。
         Thank you for reporting an evaluation issue! Please provide detailed information to help us fix it.
-        
+
         **ℹ️ 注意 / Notice:**
         - 此表單適用於 HuggingFace 開源模型的評測問題
         - 如需回報 API 模型評測問題，請前往 [Discord](https://twinkleai.tw/discord) 聯繫工作人員
-        
+
         ---
-        
+
         - This form is for HuggingFace open-source model evaluation issues
         - For API model issues, please contact us via [Discord](https://twinkleai.tw/discord)
 

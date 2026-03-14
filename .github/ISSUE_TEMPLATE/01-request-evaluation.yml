@@ -1,21 +1,21 @@
 name: 🚀 請求評測 / Request Evaluation
 description: 請求對新模型或新數據集進行評測 / Request evaluation for a new model or dataset
-title: "[評測請求] "
-labels: ["evaluation-request", "pending"]
+title: '[評測請求] '
+labels: ['evaluation-request', 'pending']
 body:
   - type: markdown
     attributes:
       value: |
         感謝您提交評測請求！請填寫以下資訊，我們會盡快處理。
         Thank you for submitting an evaluation request! Please fill in the information below.
-        
+
         **⚠️ 重要提示 / Important Notice:**
-        
+
         - ✅ **開源模型評測**：請使用此表單提交 HuggingFace 上透過 vLLM 運行的開源模型
         - 🔑 **API 模型評測**：如果您需要評測 API 服務模型（如 OpenAI、Anthropic、Google 等），因涉及 API key 管理，請前往 [Discord 社群](https://twinkleai.tw/discord) 聯繫工作人員協助
-        
+
         ---
-        
+
         - ✅ **Open Source Models**: Use this form to submit HuggingFace models running via vLLM
         - 🔑 **API Models**: For API-based models (OpenAI, Anthropic, Google, etc.), please contact our team via [Discord](https://twinkleai.tw/discord) for API key management
 
