@@ -300,6 +300,17 @@
       "openSource": true,
       "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/Gemma-3-12b-it-eval-logs-and-scores/tree/main/results/google__gemma-3-12b-it/default",
       "size": 12
+    },
+    {
+      "id": "Devstral-Small-2505-twinkle-eval-v1",
+      "label": "Devstral Small 2505 — Twinkle Eval V1",
+      "provider": "Mistral AI",
+      "modelName": "Devstral-Small-2505",
+      "modelId": "mistralai/Devstral-Small-2505",
+      "variance": "default",
+      "openSource": true,
+      "hfFolderUrl": "https://huggingface.co/datasets/twinkle-ai/Devstral-Small-2505-eval-logs-and-scores/tree/main/results/mistralai__Devstral-Small-2505/default",
+      "size": 24
     }
   ],
   "ui": {
